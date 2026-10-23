@@ -109,7 +109,7 @@ SECS=45 SHOTS=3 GAP=5 bash boot-one.sh
 
 `.bat` 与 `.sh` 流程完全一致：进 bootloader → `fastboot boot boot\alioth-boot.img` → 等 `product: xnuloader` →
 `fastboot oem ramdisk` → `fastboot stage boot\system.apfs`（2.49 GB，约 1.5 分钟）→ `fastboot stage boot\run-payload.bin` →
-`fastboot oem run` → 等 `Secs` 秒 → 连拍截图（间隔 `Gap`）→ 取日志 → `fastboot reboot` 回 Android。
+`fastboot oem run` → 等 `Secs` 秒 → 连拍截图（间隔 `Gap`）→ 取日志 → **留在 iOS**（不回安卓）。
 
 **产物**：`runs\runHHMMSS.png` / `runs\runHHMMSS.log.txt`。主屏约在内核启动后 20 秒出现；
 `Secs=45` 能稳定拍到主屏。
@@ -121,7 +121,7 @@ SECS=45 SHOTS=3 GAP=5 bash boot-one.sh
 | `-Secs 45` | `SECS=45` | 45 | `oem run` 之后等多久再截图 |
 | `-Shots 3` | `SHOTS=3` | 3 | 截图张数 |
 | `-Gap 5` | `GAP=5` | 5 | 两次截图间隔秒 |
-| `-Keep` | `KEEP=1` | 关 | 不自动重启，留在 loader（之后再 `fastboot reboot`） |
+| `-Reboot` | `REBOOT=1` | 关 | 跑完回到 Android；默认留在 iOS（`loader_return_after` 到点后才回 loader） |
 | `-NoSystem` | `SYS=`（空） | 关 | 不 stage 2.5 GB 系统卷，只跑内核（载荷自带 root.apfs 当根） |
 | `-Serial <sn>` | `SERIAL=<sn>` | 自动 | 多设备时指定序列号 |
 | `-Payload x.bin` | `PAYLOAD=x.bin` | `boot\run-payload.bin` | 换载荷 |

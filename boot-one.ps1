@@ -27,8 +27,8 @@
 .PARAMETER SkipFirmware
   跳过启动前的固件检查/补全。固件只在重建 system.apfs 时才需要，临时启动不用它。
 
-.PARAMETER Keep
-  跑完不自动重启，留在 loader（之后手工 fastboot reboot）。
+.PARAMETER Reboot
+  跑完回到 Android。默认不回安卓：脚本拷完日志/截图后，手机继续留在 iOS 里运行。
 
 .EXAMPLE
   .\boot-one.ps1
@@ -52,7 +52,7 @@ param(
     [string]$OutDir = "",
     [switch]$NoSystem,
     [switch]$SkipFirmware,
-    [switch]$Keep
+    [switch]$Reboot
 )
 
 $ErrorActionPreference = "Stop"
@@ -283,18 +283,15 @@ try {
     $null = Invoke-Tool -Exe $Fastboot -Arguments @("get_staged", $LogPath) -TimeoutSec 120
     if ((Test-Path -LiteralPath $LogPath) -and (Get-Item -LiteralPath $LogPath).Length -gt 0) {
         $clean = ([IO.File]::ReadAllText($LogPath)) -replace "`0", ""
-    $logTxt = "$LogPath.txt"
-    [IO.File]::WriteAllText($logTxt, $clean)
-    Remove-Item -LiteralPath $LogPath -Force
-    Write-Host ("log: {0} ({1} bytes)" -f $logTxt, (Get-Item -LiteralPath $logTxt).Length)
+        $logTxt = "$LogPath.txt"
+        [IO.File]::WriteAllText($logTxt, $clean)
+        Remove-Item -LiteralPath $LogPath -Force
+        Write-Host ("log: {0} ({1} bytes)" -f $logTxt, (Get-Item -LiteralPath $logTxt).Length)
     }
 } catch { Write-Host "no log: $_" }
 
-if ($Keep) {
-    Write-Host ""
-    Write-Host "left in the loader (-Keep): run 'fastboot reboot' when done" -ForegroundColor Yellow
-} else {
-    Say "back to Android"
+if ($Reboot) {
+    Say "back to Android (-Reboot)"
     try { $null = Invoke-Tool -Exe $Fastboot -Arguments @("reboot") -TimeoutSec 30 } catch { }
     for ($i = 0; $i -lt 90; $i++) {
         try { $text = Invoke-Tool -Exe $Adb -Arguments @("devices") -TimeoutSec 15 } catch { $text = "" }
@@ -302,4 +299,8 @@ if ($Keep) {
         Start-Sleep -Seconds 1
     }
     $null = Invoke-Tool -Exe $Adb -Arguments @("devices") -TimeoutSec 15
+} else {
+    Write-Host ""
+    Write-Host "left in iOS: the phone keeps running (loader_return_after=1800 s)." -ForegroundColor Green
+    Write-Host "to go back to Android: 'fastboot reboot' (or rerun with -Reboot)" -ForegroundColor Yellow
 }

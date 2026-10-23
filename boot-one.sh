@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # One run of HackiOS on the phone: boot the loader from RAM, put the iOS system image and the payload
-# into RAM, run the kernel, take screenshots, copy the log out, and go back to Android.
+# into RAM, run the kernel, take screenshots, copy the log out, and leave the phone in iOS
+# (REBOOT=1 returns to Android instead).
 # Nothing is written to a partition: "fastboot boot" and "stage" are RAM only.
 #
 # This package already contains everything the boot needs (see boot/): the UEFI, the loader, the
@@ -12,7 +13,7 @@
 #   SECS=60 bash boot-one.sh        # let the kernel run longer before the screenshot
 #   SHOTS=3 GAP=5 bash boot-one.sh  # three screenshots, 5 s apart
 #   SYS= bash boot-one.sh           # kernel only: skip staging the 2.5 GB system image
-#   KEEP=1 bash boot-one.sh         # stay in the loader afterwards instead of rebooting
+#   REBOOT=1 bash boot-one.sh       # return to Android afterwards (default: stay in iOS)
 #   PAYLOAD=... IMG=...             # override the payload / loader image
 set -u
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -182,15 +183,16 @@ if [ -s "$LOG" ]; then
 	echo "log: $LOG.txt ($(wc -c < "$LOG.txt") bytes)"
 fi
 
-if [ "${KEEP:-0}" = 1 ]; then
-	echo
-	echo "left in the loader (KEEP=1): 'fastboot reboot' when done"
-else
-	say "back to Android"
+if [ "${REBOOT:-0}" = 1 ]; then
+	say "back to Android (REBOOT=1)"
 	fb reboot >/dev/null 2>&1
 	for i in $(seq 1 90); do
 		$ADB devices 2>/dev/null | grep -q "device$" && break
 		sleep 1
 	done
 	$ADB devices | tail -2
+else
+	echo
+	echo "left in iOS: the phone keeps running (loader_return_after=1800 s)."
+	echo "to go back to Android: 'fastboot reboot' (or rerun with REBOOT=1)"
 fi
