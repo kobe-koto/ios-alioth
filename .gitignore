@@ -1,0 +1,14 @@
+# 体积/版权原因不入库的构建产物（本地交付包里有）
+firmware/
+runs/
+boot/system.apfs
+
+# 固件下载/校验的临时文件
+*.part
+.verified
+*.ipsw
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+*.swp

@@ -1,0 +1,24 @@
+#!/bin/bash
+# clang wrapper for cross-building XNU on Linux:
+#  - forces an Apple Mach-O target (stock Linux clang defaults to ELF)
+#  - drops flags only Apple's clang understands
+#  - links with the cctools ld64
+HB="$(cd "$(dirname "$0")" && pwd)"
+case "$(basename "$0")" in *++) drv=clang++; extra=(-fno-use-cxa-atexit);; *) drv=clang; extra=();; esac
+args=()
+for a in "$@"; do
+  case "$a" in
+    -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang) ;;
+    -fapple-kext-vtable-verify|-Wno-vla-cxx-extension) ;;
+    -Werror|-Werror=*|-Weverything|-pedantic-errors) ;;
+    *) args+=("$a");;
+  esac
+done
+# One kernel image is built per device (common/build.sh <device>): xnu-build.sh exports the profile
+# name as XNU_DEVICE, so a driver that keeps two devices' addresses in one file can select them with
+# #if defined(PLATFORM_ALIOTH) ... #else ... #endif without a second copy of the file.
+if [ -n "${XNU_DEVICE:-}" ]; then
+  args+=("-DPLATFORM_$(printf '%s' "$XNU_DEVICE" | tr 'a-z-' 'A-Z_')=1")
+fi
+exec /usr/bin/$drv -include "$HB/../../hostinc/xnu_clang_compat.h" -target arm64-apple-ios${XNU_SDK_VERSION:-16.5} --ld-path="$HB/ld64" \
+  -w "${extra[@]}" "${args[@]}"

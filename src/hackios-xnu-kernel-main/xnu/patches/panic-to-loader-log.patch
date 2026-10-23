@@ -1,0 +1,24 @@
+--- a/osfmk/kern/debug.c
++++ b/osfmk/kern/debug.c
+@@ -1088,6 +1088,21 @@
+ 	/* do max nested panic/debugger check, this will report nesting to the console and spin forever if we exceed a limit */
+ 	check_and_handle_nested_panic(panic_options_mask, panic_caller, panic_format_str, panic_args);
+ 
++	/*
++	 * No serial port, no debugger, and the console this kernel does have is not written to on this
++	 * path: the panic's text would be lost. Put it in the loader's log, which outlives the kernel.
++	 */
++	{
++		extern void loader_log_putc(char c);
++		static const char panic_banner[] = "\n--- panic ---\n";
++
++		for (const char *c = panic_banner; *c != 0; c++) {
++			loader_log_putc(*c);
++		}
++		_doprnt(panic_format_str, panic_args, loader_log_putc, 0);
++		loader_log_putc('\n');
++	}
++
+ 	/* Handle any necessary platform specific actions before we proceed */
+ 	PEInitiatePanic();
+ 
