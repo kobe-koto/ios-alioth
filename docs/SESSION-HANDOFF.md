@@ -767,6 +767,35 @@ GMU 之外的某物复位整机。**
 
 工具：任何会复位的真机实验一律用 `tools/gpu-follow.sh`（层1）+ `adreno_pre_sqe_ms`（层2），已验证能稳定抓到复位前状态。
 
+#### 第七轮：loader 重放 CP 启动——**实验无效**（2026-10-24）
+
+思路（省去把整条 bring-up 搬进 UEFI）：XNU 用 `adreno_cp_defer=1` 把 GPU 带到 `CP_SQE_CNTL` 前一刻就停、
+不写那条，`adreno_return=1 adreno_dirty=1` 保持上电返回 loader；再由 loader 的新命令 `oem gpustart` 写那条，
+在没有 XNU 中断/异常向量的裸 UEFI 里，看是否仍复位。实现并真机跑通了流程：
+
+- defer 轮如期停在「NOT writing cp_sqe_cntl」，**step 20 后存活 9s、干净返回 loader**（载荷
+  `run-payload-gpu-defer.bin`，日志 `logs/gpu-follow/gpu-174444.last.log`）。
+- `oem gpustart` 返回 OKAY、手机**没复位**——但这**不是结论**：loader 读 GPU 寄存器**全 0**
+  （`CP_SQE_CNTL` 写 1 后回读仍 0，`rbbm_status 0`），而 XNU 在 defer 返回前读的是 `rbbm_status 0x1`。
+
+**根因：跨 XNU→loader 的 GPU 状态交接不成立。** `loader_return` 的 stub 关 MMU、恢复 UEFI 环境；UEFI 页表里
+UFS（`hc_rd` @0x1d84000 有值）映射着，但 GPU 块 0x3d00000 没映射，且 GMU 对 GX 的供电没在 loader 侧重建——
+loader 读到全 0，那条写根本没落到活着的 GPU 上。所以「没复位」只是「写没生效」，**本轮没能回答原问题**。
+证据：`docs/evidence/2026-10-24-gpu-loader-gpustart-INVALID.log`（文件名标 INVALID）。
+
+教训：要在 loader 里真正写 CP，必须在 loader 侧**自建 GPU MMIO 映射 + 重建 GMU/GX 供电**——即把 bring-up 的
+相当一部分搬进 UEFI，正是本想绕开的重活。此路若走要正面做这件事，不能靠「XNU 交接上电状态」。
+
+**已落地代码（保留，供将来真正做 UEFI 重放时复用）：** `adreno_cp_defer`（step 20 停在写前并返回）、loader 的
+`oem gpustart`、以及 `tools/repack-loader.py`（把新 loader 换进能用的 alioth 镜像——绕开 alioth BootShim 的
+FD_BASE 固化问题，见该文件注释）。
+
+#### 第八轮（进行中）：XNU 侧屏蔽中断再写 CP_SQE_CNTL
+
+比 UEFI 重放轻得多、且全在 XNU 内：写 `CP_SQE_CNTL` **之前**先屏蔽所有中断（本地 DAIF + GIC），并给 SError
+一个「记录而非复位」的落点。若屏蔽后写 CP **不复位**→复位由中断引起；若**仍复位**→排除中断，指向 SError 或硬件。
+用现成 `gpu-follow.sh` 捕获，不碰 loader。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
