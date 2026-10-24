@@ -909,6 +909,43 @@ aperture 代码保留（`adreno_aperture`、`scm4`）——它是正确的、hyp
 
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
+#### 第十二轮：方向 1（微码）排查——无缺陷可修，候选降为低概率（2026-10-24，纯源码分析）
+
+逐条核对微码路径，**全部与厂商一致，没有可修的缺陷**：
+- **版本不设门槛**：厂商 `_load_firmware` 把 `fw->version = adreno_get_ucode_version(data)` 只喂给
+  `adreno_prop_ucode_version`（上报 userspace 查询），**不参与启动判定**。版本对不对都不拒绝启动。
+- **内存布局一致**：厂商 `memcpy(hostptr, &fw->data[4], fw->size-4)`——跳过前 4 字节头，与本驱动
+  `memcpy(core_sqe.memory, microcode+4, size-4)` 逐字节同一做法。
+- **固件来源正确**：`a650_sqe.fw` 提取自真机 Android `/vendor/firmware`（§9.3 alioth.py 已校验版本合法），
+  是 kgsl 的那份，不是 Mesa/freedreno 变体。
+- **CP_SQE_STAT** 只在错误中断回调 `a6xx_cp_hw_err_callback` 里读（报 opcode 错误时），非启动流程。
+
+`adreno_blind=1`（微码指向 `CORE_NOWHERE`）不复位、真微码复位——仍是最硬的事实，但它把结论钉死在
+「**CP 成功取指并执行真微码 → 复位**」，而微码是 Qualcomm 签名黑盒，无法再往里看。**方向 1 没有新的可执行实验。**
+
+#### 诚实的进度评估（第十二轮后）
+
+**已排除（都有真机证据）**：a6xx_start 前置写、IFPC、空闲掉电、OOB、SPTPRAC、keepalive、微码地址、zap 顺序、
+SMMU 翻译与取指（bypass 与非 bypass 都试、aperture 注册被 hyp 接受仍复位）、寄存器偏移、SCTLR、PTE 权限、
+`CP_RB_RPTR_ADDR`/bit27、本核 IRQ/FIQ/SError、微码版本/布局/来源。
+
+**钉死的事实**：复位是 **SoC 级**（PMIC `hw_reset`，loader 读 `reason1 0x2`——此值尚未精确解码），发生在
+**CP 成功执行真微码的瞬间**；与电源无关、与本核异常无关、与 SMMU 路径/hyp 访问授权无关。
+
+**手里已无「高信息量且一跑出结果」的真机实验。** 剩下的都是低概率或需大量新基建的猜测：
+- `reason1 0x2` 的精确解码（需读 loader 怎么读 PMIC、哪个寄存器——目前是 loader 的二手解读，未必对应 qpnp POFF 位表）。
+- `qcom_scm_assign_mem`（VMID_HLOS→GPU VMID）给 ring/微码——`kgsl_sharedmem.c:551` 是 secure/pixel 路径，
+  普通内存是否需要未确证；要通读 kgsl 的 global memdesc 分配路径确认，工作量大、概率未知。
+- CP 启动即碰的 a650 专属子块（LPAC/preemption）——但 `adreno_blind` 表明问题在微码执行，不易从寄存器侧补。
+
+**建议**：GPU 到此是一个干净且深入的停点——12 轮、全程真机证据、文档与工具（`gpu-follow.sh`、`adreno_*`
+实验开关、`repack-loader.py`、构建链）齐备且可复用。若要再推进，最可能有突破的是**换一类信息源**而非继续黑盒试：
+①在真机 Android 侧用 ftrace/kgsl 首次启动 GPU 的完整寄存器+SCM trace 做「金标准」逐条对照（§9 第三轮因本机
+缺 /dev/mem、debugfs 关闭而受阻，需另找途径，如厂商内核加 trace 重编）；②精确解码 `reason1 0x2` 以确认复位
+是 XPU/硬件哪一类。两者都要新基建，不是一跑一看。
+
+工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
