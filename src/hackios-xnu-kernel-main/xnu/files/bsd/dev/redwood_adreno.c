@@ -111,6 +111,9 @@
  *                      is powered, instead of after everything
  *   adreno_watch=S     after the last step, say once a second for S seconds (default 20) that
  *                      the machine is still alive, and what was written last
+ *   adreno_pre_sqe_ms=N step 20 holds N ms (default 800), silent, right before the CP_SQE_CNTL
+ *                      write that resets the phone, so the host's log pull (tools/gpu-follow.sh)
+ *                      is sure to have carried every line of the state up to that point first
  *   adreno_return=1    when all is over, go back to the loader instead of starting the system
  *   display_probe=1    before any step: read what the firmware left the display controller
  *                      doing (display_probe() below; two clocks are turned on, nothing else written)
@@ -327,6 +330,7 @@ soc_select(void)
  * as well, before the next register is touched.
  */
 extern void loader_log_putc(char c);
+extern void loader_log_flush(void);     /* put what has been printed into memory for the loader's watcher core now */
 
 static int say(const char *format, ...) __printflike(1, 2);
 
@@ -3320,7 +3324,24 @@ step_core_start(void)
 		    rd(gmu.base + GMU_WORD(0x5192)));
 	}
 	/* adreno_sqe=N: what goes into CP_SQE_CNTL (1 starts it; 0 is the control: does the writing itself end the run?) */
+	/*
+	 * The fatal write resets the whole SoC within ~0.5-1 s (SESSION-HANDOFF.md §9.5), and on this
+	 * phone the log reaches the host only by its pull of the live buffer (no logdump partition, no
+	 * UART): tools/gpu-follow.sh pulls every ~150 ms. So before the write, make the state complete
+	 * and still: print a marker, flush the kernel's log to the watcher core by hand (loader_log_putc
+	 * flushes on newline, but a last explicit flush costs nothing), then hold adreno_pre_sqe_ms (the
+	 * default is several poll gaps) with nothing printed. A pull is then guaranteed to land in that
+	 * quiet window and carry everything up to and including the marker -- so whatever the next line
+	 * would have been, the host already has the full "just before the start" state.
+	 */
+	uint32_t pre_sqe_ms = 800;
+	PE_parse_boot_argn("adreno_pre_sqe_ms", &pre_sqe_ms, sizeof(pre_sqe_ms));
+	printf("adreno: %u: STATE COMPLETE; the very next write is cp_sqe_cntl=%u, which is what resets "
+	    "the phone -- everything up to this line is the state just before it\n", step, sqe);
+	loader_log_flush();
+	sleep_ms(pre_sqe_ms);
 	printf("adreno: %u: about to write %u to cp_sqe_cntl\n", step, sqe);
+	loader_log_flush();
 	put(&gpu, "cp_sqe_cntl", CP_SQE_CNTL, sqe);
 	/*
 	 * One access at a time, each announced before it is made: the run stops at the start of the
