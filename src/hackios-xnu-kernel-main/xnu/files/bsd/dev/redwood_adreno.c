@@ -3363,6 +3363,23 @@ step_core_start(void)
 	printf("adreno: %u: STATE COMPLETE; the very next write is cp_sqe_cntl=%u, which is what resets "
 	    "the phone -- everything up to this line is the state just before it\n", step, sqe);
 	loader_log_flush();
+	/*
+	 * adreno_cp_defer=1: do NOT write CP_SQE_CNTL here. Everything up to this point is left standing
+	 * and the GPU is handed back powered (use adreno_return=1 adreno_dirty=1), so the loader can make
+	 * the one fatal write itself (oem gpustart) -- outside XNU's exception/interrupt vectors. If it
+	 * resets there too, the reset is the hardware/hypervisor's answer to the CP starting, not XNU's;
+	 * if it does not, the reset here was XNU-side. This is the §9.5 "replay the start from the loader"
+	 * experiment, done without moving the whole bring-up into UEFI.
+	 */
+	uint32_t defer = 0;
+	PE_parse_boot_argn("adreno_cp_defer", &defer, sizeof(defer));
+	if (defer) {
+		printf("adreno: %u: adreno_cp_defer=1: NOT writing cp_sqe_cntl; the GPU is left standing for the "
+		    "loader to start (oem gpustart). CP_SQE_CNTL is at %#x, write %u there.\n", step,
+		    gpu.phys + CP_SQE_CNTL, sqe);
+		loader_log_flush();
+		return !space_faulted(&core_space);
+	}
 	sleep_ms(pre_sqe_ms);
 	printf("adreno: %u: about to write %u to cp_sqe_cntl\n", step, sqe);
 	loader_log_flush();

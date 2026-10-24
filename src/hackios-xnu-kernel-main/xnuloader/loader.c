@@ -3767,6 +3767,32 @@ fb_command(char *cmd)
 			/* the firmware's memory map into the log (then "oem log" and fetch it) */
 			print_memory_map();
 			fb_reply("OKAY", "");
+		} else if (starts_with(cmd, "oem gpustart")) {
+			/*
+			 * The §9.5 experiment: a kernel run with adreno_cp_defer=1 leaves the Adreno brought
+			 * up to the point just before CP_SQE_CNTL and hands the GPU back powered (adreno_return=1
+			 * adreno_dirty=1). This writes that one register HERE, in the loader -- a bare UEFI core
+			 * with no XNU exception/interrupt vectors. If the phone resets on this write too, the
+			 * reset is the hardware/hypervisor's answer to the command processor starting, not XNU's.
+			 * MMIO is identity-mapped in this UEFI; CP_SQE_CNTL is 0x3d02020 (gpu 0x3d00000 + 4*0x808).
+			 */
+			volatile uint32_t *sqe = (volatile uint32_t *)(uintptr_t)0x03d02020;
+			volatile uint32_t *rbbm_status = (volatile uint32_t *)(uintptr_t)0x03d00840;
+			volatile uint32_t *cp_hw_fault = (volatile uint32_t *)(uintptr_t)0x03d02084;
+			volatile uint32_t *cp_int = (volatile uint32_t *)(uintptr_t)0x03d0208c;
+
+			print("gpustart: CP_SQE_CNTL (0x3d02020) reads %x before the write\n", *sqe);
+			print("gpustart: rbbm_status %x, cp_hw_fault %x, cp_interrupt %x before the write\n",
+			    *rbbm_status, *cp_hw_fault, *cp_int);
+			print("gpustart: writing 1 to CP_SQE_CNTL now -- if the phone resets, it is not XNU\n");
+			flush_log();                    /* get this line out before the write, in case it is the end */
+			*sqe = 1;
+			__asm__ volatile ("dsb sy" : : : "memory");
+			BS->stall(50000);               /* 50 ms: the phone resets within ~0.5-1 s if it is going to */
+			print("gpustart: the write to CP_SQE_CNTL came back (the loader survived it)\n");
+			print("gpustart: after: CP_SQE_CNTL %x, rbbm_status %x, cp_hw_fault %x, cp_interrupt %x\n",
+			    *sqe, *rbbm_status, *cp_hw_fault, *cp_int);
+			fb_reply("OKAY", "");
 		} else if (starts_with(cmd, "oem log")) {
 			if (busy) {
 				compose_live_log(running_live, running_slide);
