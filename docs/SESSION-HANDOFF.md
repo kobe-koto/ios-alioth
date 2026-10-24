@@ -1053,6 +1053,23 @@ XPU 属性**（CP 取指拿到的字节/权限）；③微码执行时碰到的�
 2. **ring/微码内存属性**：确认 CP 取指的内存 stage-2/XPU 归属是否需要 `qcom_scm_assign_mem`（VMID 转移）。
 3. 精确解码 PMIC `reason1 0x2`（需读 loader 的 PMIC 读取实现）。
 
+#### 补注：为什么 redwood 行、K40 不行——参照应是 redwood，不是 a640（2026-10-24）
+
+问「Adreno 640 实现有无参考价值」时的澄清：
+- **a640 参考价值有限**。a640/a650/a660 同属 a6xx，Linux 的 CP 启动序列（`a6xx_rb_start`）几乎一致；a650 的
+  per-family 参数（`struct adreno_soc`）已从 kona 厂商树精确取到并对齐，a640 给不了 a650 没有的新寄存器序列。
+- **真正的活参照是 redwood 自己**：**同一份 `redwood_adreno.c`、同样的 step 1-20、同样的 `CP_SQE_CNTL=1`，在
+  redwood 上 GPU 能画图**（README `gpu=1` 实拍、`docs/gpu-first-frame.png`），CP 启动不复位；K40 复位。
+- **两者关键差异不在 GPU 寄存器（已对齐），而在 SoC/hypervisor**：redwood = Snapdragon 778G（sc7280），
+  K40 = Snapdragon 870（SM8250-AC / kona）。16 轮证据全指向「SoC 级复位、trace 看不到的层面」，与「两颗 SoC 的
+  hyp/TrustZone 固件不同」完全吻合，并自洽解释：aperture SCM 在 K40 被接受却不够（SM8250 的 hyp 对 GPU 总线主策略
+  更严）、CP 一取指就复位（778G hyp 放行 / 870 hyp 判非法→复位）、所有可见 MMIO 对齐仍复位（差异在 hyp 固件）。
+
+**结论**：这强化而非改变既有收尾判断——复位根因在 SM8250 的 **hypervisor/TrustZone 对 GPU（CP 作为总线主）的策略**，
+不在任何可补的 MMIO 寄存器。下一步若推进，仍是「trace 之外」那三条（HFI 消息流比对最优先），且本质是要搞清
+SM8250 的 hyp 对「非厂商 kgsl 发起的 GPU CP 启动」施加了什么额外门槛——这可能需要 SM8250 的 hyp/TZ 侧信息
+（厂商不公开），是这条移植路线在 K40 上的根本难点。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
