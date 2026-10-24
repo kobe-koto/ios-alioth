@@ -822,6 +822,39 @@ FD_BASE 固化问题，见该文件注释）。
 
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
+#### 第九轮：源码分析——命中「CP SMMU aperture 未向 hyp 注册」假设（2026-10-24，待真机）
+
+回厂商 kgsl（`android_kernel_xiaomi_sm8250/drivers/gpu/msm`）查「CP 首次总线访问前的授权」，找到一条**本驱动
+从未做、且 a6xx 必做**的 SCM，它把前八轮的所有事实统一起来了：
+
+- `kgsl_iommu.c:1215` `_attach_pt` 里：`if (is_perprocess && MMU_FEATURE(KGSL_MMU_SMMU_APERTURE))` →
+  `scm_call2(SCM_SIP_FNID(SCM_SVC_MP=0xC, CP_SMMU_APERTURE_ID=0x1B), args)`，
+  `args[0]=0xFFFF0000 | (CP_APERTURE_REG=0 << 8) | cb_num`，`args[1..3]=0xFFFFFFFF`，`SCM_ARGS(4)`。
+  含义：向 hypervisor 注册「**CP 这个总线主通过 SMMU 的 context bank = cb_num、aperture 0 访问是合法的**」。
+- `adreno.c:1518`：**所有 a6xx 无条件 `mmu.features |= KGSL_MMU_SMMU_APERTURE`** → K40 的 a650 必走这条。
+- `kona-gpu.dtsi` 注释直给铁证：**`/* CB5(ATOS) & CB5/6/7 are protected by HYP */`**，`gfx3d_user` 的流是
+  `<&kgsl_smmu 0x0 0x401>`。与 §9.5 第二轮实测「SMMU 0/4/5 号表项写不进、核心自适应用 2 号」吻合——
+  **hyp 对 GPU SMMU 的 context bank 有策略**。
+
+**假设（第一次把「为何 bypass 也复位」和「厂商必做 aperture SCM」统一）：** hyp 要求 GPU 的 CP 必须通过
+**经 aperture SCM(0xC,0x1B)注册过的 context bank** 翻译访问；本驱动用 `adreno_direct=1` **bypass 了翻译**、
+且**从不做这个 SCM**，所以 CP 一自主取指，hyp 判非法 → 复位 SoC（第八轮已证是 SoC 级、非本核异常、非电源）。
+
+**这修正了一个旧认知**：§9.5 一直把 `adreno_direct`(bypass) 当作「排除 SMMU」的中性手段，两个方向都试过都复位。
+但那两次**都没做 aperture 注册**，而且 bypass 本身可能正是 hyp 不允许的。从没试过的组合是：**非 bypass（走真 CB 翻译）
++ aperture SCM 注册同一个 CB**——这才是厂商完整路径。
+
+**下一轮（实现，中等工程量）：**
+1. 在本驱动加 `SCM_FOUR_VALUES` 并扩 `scm()` 传第 4 个值（x5，现 11 个调用点都补 0）——或单独写个 4 值 SCM 辅助。
+   发 `SCM_64|SCM_SIP|SCM_CALL(0xC,0x1B)`，`args=(0xFFFF0000|core_space.context, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)`。
+   新 boot-arg `adreno_aperture=1`，在 step 18 建好 core 的 CB 之后、step 20 启动 CP 之前调。
+2. 关键前提：**必须非 bypass**（`adreno_direct=0` 或新路径），让 ring/微码真正映射进 `core_space.context` 的页表，
+   且 aperture SCM 注册的 `cb_num` 要与之一致。先单独上 `adreno_aperture=1`（仍 direct）看 SCM 返回码——
+   返回 0 说明 hyp 接受注册、是有效前进；返回错误则 aperture 这条也要重估。
+3. 若 SCM 通过但仍复位，再做「非 bypass + aperture」的完整组合。
+
+工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：

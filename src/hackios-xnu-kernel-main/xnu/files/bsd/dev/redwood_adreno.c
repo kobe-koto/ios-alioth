@@ -122,6 +122,10 @@
  *                      2 also SError. If the reset stops with everything masked it is not an
  *                      exception this core takes; DAIF is restored after, so a deferred SError fires
  *                      then rather than being lost
+ *   adreno_aperture=1  step 20 registers the CP's SMMU aperture with the hypervisor before starting
+ *                      the command processor (SCM 0xC,0x1B; what every a6xx does and this driver
+ *                      never has). For the real path pair with adreno_direct=0 (the CP must
+ *                      translate through that context bank, not bypass it)
  *   adreno_return=1    when all is over, go back to the loader instead of starting the system
  *   display_probe=1    before any step: read what the firmware left the display controller
  *                      doing (display_probe() below; two clocks are turned on, nothing else written)
@@ -1814,14 +1818,24 @@ space_off(struct gpu_space *space)
 #define PAS_GPU                 13
 
 /* One call. What TrustZone returns: 0 or an error of its own, and a word of answer. */
+static int32_t scm4(const char *what, uint64_t function, uint64_t arguments, uint64_t first, uint64_t second,
+    uint64_t third, uint64_t fourth, uint64_t *answer);
 static int32_t
 scm(const char *what, uint64_t function, uint64_t arguments, uint64_t first, uint64_t second, uint64_t third,
     uint64_t *answer)
 {
+	return scm4(what, function, arguments, first, second, third, 0, answer);
+}
+
+/* The same, with a fourth value argument (x5): the CP SMMU aperture call wants four. */
+static int32_t
+scm4(const char *what, uint64_t function, uint64_t arguments, uint64_t first, uint64_t second, uint64_t third,
+    uint64_t fourth, uint64_t *answer)
+{
 	uint64_t session = 0;
 
-	printf("adreno: %u: about to ask TrustZone %s: smc %#llx, arguments %#llx, %#llx, %#llx\n", step, what, function, first,
-	    second, third);
+	printf("adreno: %u: about to ask TrustZone %s: smc %#llx, arguments %#llx, %#llx, %#llx, %#llx\n", step, what,
+	    function, first, second, third, fourth);
 	snprintf(last_write, sizeof(last_write), "step %u asked TrustZone %#llx(%#llx, %#llx)", step, function, first, second);
 	hold(true);
 	for (int i = 0; i < 100; i++) {
@@ -1830,7 +1844,7 @@ scm(const char *what, uint64_t function, uint64_t arguments, uint64_t first, uin
 		register uint64_t x2 __asm__("x2") = first;
 		register uint64_t x3 __asm__("x3") = second;
 		register uint64_t x4 __asm__("x4") = third;
-		register uint64_t x5 __asm__("x5") = 0;
+		register uint64_t x5 __asm__("x5") = fourth;
 		register uint64_t x6 __asm__("x6") = session;
 		register uint64_t x7 __asm__("x7") = 0;
 
@@ -3128,6 +3142,9 @@ step_zap_load(void)
 
 /* ---- step 20: the 3D core's registers, its command processor started, its first command ------------------- */
 
+#define CP_APERTURE_REG         0       /* kgsl_iommu.h: the CP's aperture register for the hyp SCM */
+#define SCM_ARGS_4              4       /* SCM_ARGS(4) for four plain value arguments (all type 0) */
+
 /*
  * The part of the vendor's a6xx_start()/a6xx_hw_init() this driver has not made (SESSION-HANDOFF.md
  * 9.5, the remaining "heavy work"): clock-gating every cluster (a6xx_set_hwcg: the GMU AO words,
@@ -3317,6 +3334,29 @@ step_core_start(void)
 	announce(blind ? "start the 3D core's command processor with its microcode nowhere" :
 	    "start the 3D core's command processor");
 	core_runs = true;
+	/*
+	 * adreno_aperture=1: register the CP's SMMU aperture with the hypervisor, the one thing a6xx
+	 * always does that this driver never has (kgsl_iommu.c _attach_pt: every a6xx sets
+	 * KGSL_MMU_SMMU_APERTURE, adreno.c:1518). SCM (service 0xC, command 0x1B), four values:
+	 * 0xFFFF0000 | (CP_APERTURE_REG=0 << 8) | cb_num, then three 0xFFFFFFFF. It tells the hypervisor
+	 * that the CP, as a bus master, may reach memory through this SMMU context bank -- so that when
+	 * the command processor first fetches on its own the hypervisor does not see an unregistered
+	 * master and reset the SoC (SESSION-HANDOFF.md §9.5 round 9: the surviving hypothesis after
+	 * power and CPU-exception were both excluded). cb_num is the core's own context
+	 * (core_space.context). NOTE: for this to be the real path the core must translate through that
+	 * bank, not bypass it -- so pair with adreno_direct=0; with adreno_direct=1 this still shows
+	 * whether the hypervisor accepts the registration (answer 0) as a first, safe check.
+	 */
+	uint32_t aperture = 0;
+	PE_parse_boot_argn("adreno_aperture", &aperture, sizeof(aperture));
+	if (aperture) {
+		uint64_t answer = ~0ull;
+		uint32_t cb = core_space.context;
+		int32_t r = scm4("to register the CP's SMMU aperture", SCM_64 | SCM_SIP | SCM_CALL(0xC, 0x1B), SCM_ARGS_4,
+		    0xFFFF0000u | ((CP_APERTURE_REG & 0xffu) << 8) | (cb & 0xffu), 0xFFFFFFFFu, 0xFFFFFFFFu, 0xFFFFFFFFu, &answer);
+		printf("adreno: %u: CP SMMU aperture (context bank %u): TrustZone returned %d, answer %#llx%s\n", step, cb, r,
+		    answer, r == 0 && answer == 0 ? " -- accepted" : " -- NOT accepted");
+	}
 	/*
 	 * adreno_keepalive=1 (default): before the command processor is started, tell the GMU to keep
 	 * the 3D core powered no matter what it makes of the core's activity -- GMU_PWR_COL_KEEPALIVE=1.
