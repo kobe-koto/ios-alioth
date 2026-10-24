@@ -1,0 +1,97 @@
+== XNULOADER run (usb) ==
+payload entry 'kernel' size e76578
+payload entry 'ramdisk' size 400000
+payload entry 'cmdline' size aa
+kernel va fffffff007004000..fffffff00825e578 entry fffffff00744d4a8
+largest free block f4000000 size 28c000000
+phys window f4000000 size 180000000, claim status 0
+kernel loaded at pa f7004000..f8260000
+ramdisk at pa f8260000 size 400000
+return slot patched at f744e7f0, checkpoint 0
+cores for the kernel, in the order it takes them: 700 600 500 400 300 200 100
+device tree f8660000 len 4404, boot_args f8670000, top f8674000
+cmdline: debug=0x8 rd=md0 loader_return_after=300 bootcpu=7 cpus=8 adreno_soc=a650 adreno=20 adreno_direct=1 adreno_return=1 adreno_watch=15 adreno_fullstart=1 adreno_aperture=1 adreno_cp_defer=1
+the kernel will run on core 700 (this is core 0)
+jumping to f744d4a8
+log: 4096 bytes written to logdump (0), read back the same (0)
+core 700: the firmware answers 0 to the request to start it
+log: 4096 bytes written to logdump (0), read back the same (0)
+2 s: the kernel has logged 30892 bytes, heartbeat 1; the last of it:
+SHADER
+adreno: step 19: done
+adreno: 20: the GPU block's register bus clock (ahb) measures 46317048 Hz
+adreno: step 20: write the 3D core's registers as Linux does before it starts the command processor: the first writes to the core itself
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+4 s: the kernel has logged 34288 bytes, heartbeat 1; the last of it:
+o: 20: about to write gpu cp_apriv_cntl at 0x3d02110: 0x6e
+adreno: 20: about to write gpu rb_dbg_eco_cntl at 0x3d23810: 0x4100000
+adreno: step 20: clock-gate the GMU AO and every GPU cluster as a6xx_set_hwcg does, then the top-level enable
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+6 s: the kernel has logged 37817 bytes, heartbeat 1; the last of it:
+: 20: about to write gpu rbbm_clock at 0x3d00468: 0x555
+adreno: 20: about to write gpu rbbm_clock_cntl at 0x3d002b8: 0x8aa8aa82
+adreno: step 20: set the register-protection table the vendor's a6xx_protect_init does (a620 spans, the a650's)
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+8 s: the kernel has logged 40379 bytes, heartbeat 1; the last of it:
+0xaffcf000
+adreno: 20: about to write gpu cp_protect_reg at 0x3d021c0: 0x7ffcfc00
+adreno: 20: about to write gpu cp_protect_reg at 0x3d021fc: 0x80011c00
+adreno: step 20: write the a650's five bicubic sampling weights (a6xx_set_ubwc_config)
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+10 s: the kernel has logged 41673 bytes, heartbeat 1; the last of it:
+ead gpu cp_apriv_cntl at 0x3d02110
+adreno: 20: gpu cp_apriv_cntl (0x3d02110) = 0x6e
+adreno: 20: about to read gpu rbbm_status at 0x3d00840
+adreno: 20: gpu rbbm_status (0x3d00840) = 0x1
+adreno: step 20: start the 3D core's command processor
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+12 s: the kernel has logged 42170 bytes, heartbeat 2; the last of it:
+swer 0 -- accepted
+adreno: 20: about to write gmu pwr_col_keepalive at 0x3d7e30c: 0x1
+adreno: 20: told the GMU to keep the core powered (keepalive=1, reads back 0x1)
+adreno: 20: before the start: sptprac control 0, status 0, hfi status 0x1
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+14 s: the kernel has logged 42601 bytes, heartbeat 2; the last of it:
+prac 0, gmu2host intr 0
+adreno: 20: still here 1500 ms into the pause before the start: rbbm_status 0x1, sptprac 0, gmu2host intr 0
+adreno: 20: still here 2000 ms into the pause before the start: rbbm_status 0x1, sptprac 0, gmu2host intr 0
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+16 s: the kernel has logged 43248 bytes, heartbeat 2; the last of it:
+riting cp_sqe_cntl; the GPU is left standing for the loader to start (oem gpustart). CP_SQE_CNTL is at 0x3d02020, write 1 there.
+adreno: step 20: done
+adreno: alive 1 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+
+log: 4096 bytes written to logdump (0), read back the same (0)
+18 s: the kernel has logged 43426 bytes, heartbeat 2; the last of it:
+p 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 2 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 3 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+
+log: 8192 bytes written to logdump (0), read back the same (0)
+20 s: the kernel has logged 43604 bytes, heartbeat 2; the last of it:
+p 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 4 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 5 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+
+log: 8192 bytes written to logdump (0), read back the same (0)
+22 s: the kernel has logged 43782 bytes, heartbeat 3; the last of it:
+p 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 6 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 7 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+
+log: 8192 bytes written to logdump (0), read back the same (0)
+24 s: the kernel has logged 43960 bytes, heartbeat 3; the last of it:
+p 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 8 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+adreno: alive 9 s after step 20; step 20 wrote 0x1 to gmu pwr_col_keepalive at 0x3d7e30c
+
+log: 8192 bytes written to logdump (0), read back the same (0)
+kernel returned: log at f7b309c0, 120527 bytes
+log: 126976 bytes written to logdump (0), read back the same (0)

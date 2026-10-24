@@ -853,6 +853,30 @@ FD_BASE 固化问题，见该文件注释）。
    返回 0 说明 hyp 接受注册、是有效前进；返回错误则 aperture 这条也要重估。
 3. 若 SCM 通过但仍复位，再做「非 bypass + aperture」的完整组合。
 
+**第十轮：aperture SCM 被 hypervisor 接受（2026-10-24，真机）**
+
+第一步安全检查（`adreno_aperture=1 adreno_direct=1 adreno_cp_defer=1`：注册但不写 CP）真机结果——
+```
+smc 0x42000c1b, arguments 0xffff0000, 0xffffffff, 0xffffffff, 0xffffffff
+CP SMMU aperture (context bank 0): TrustZone returned 0, answer 0 -- accepted
+```
+`0x42000c1b` = `SCM_64|SCM_SIP|(0xC<<8|0x1B)`，与厂商 `SCM_SIP_FNID(0xC,0x1B)` 完全一致；args[0]=`0xFFFF0000|cb=0`。
+**hypervisor 返回 0 — 第一次干净接受了来自本驱动的 GPU 相关注册**（此前 OOB 不被确认、SMMU 部分表项被拒）。
+手机存活、干净返回（defer 跳过了 CP 写）。证据：`docs/evidence/2026-10-24-gpu-aperture-accepted.log`。
+
+**意义**：调用形式、SMC 号、参数编码全部正确，且 hyp 认这个调用。这是继续沿 aperture 假设前进的绿灯。
+
+**待解变量 / 下一步**：
+- 注册的是 **context bank 0**（`core_space.context` 初值）。但当前 `adreno_direct=1` 把 core 流设成 **bypass**，
+  CP 根本不经 CB 翻译——所以「hyp 接受 0 号注册」还没被 CP 的真实访问检验。
+- **真正的判定实验**：`adreno_aperture=1 adreno_direct=0`（走真翻译）+ 不 defer（真写 CP）。要点：
+  (a) step 18 让 core 流走 CB 翻译而非 bypass，ring/微码映射进 `core_space.context` 的页表；
+  (b) aperture 注册的 `cb` 必须等于那个实际 CB；
+  (c) 若 §9.5 第二轮的「0 号表项写不进、自适应到 2 号」在非 bypass 路径复现，则要注册 2 号并保证翻译也在 2 号。
+  预期：若假设成立，CP 首次取指不再被 hyp 判非法，`the write to cp_sqe_cntl came back` 首次出现。
+- 风险：非 bypass 需要 core 的页表真正把 `CORE_SQE_ADDRESS`/`CORE_RING_ADDRESS` 映射到物理的微码/ring——
+  step 18 的 `adreno_direct=0` 路径（`block_new` + `space_on` 非 bypass）是否已就绪需先核对。
+
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
