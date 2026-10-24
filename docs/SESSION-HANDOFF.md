@@ -879,6 +879,36 @@ CP SMMU aperture (context bank 0): TrustZone returned 0, answer 0 -- accepted
 
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
+#### 第十一轮：非 bypass 翻译 + aperture 注册 + 真写 CP——**仍复位**（2026-10-24，真机）
+
+厂商完整路径的决定性组合（从没一起试过）：`adreno_direct=0 adreno_aperture=1 adreno_fullstart=1`，真写 CP。
+三个前提都在真机复现成功：
+- **step 18 非 bypass 翻译建起来了**：`give the SMMU's context 0 these tables ... stream 0`，
+  SMR 写 `0x84010000`(stream 0)与 `0x84010001`(stream 1)都被接受、回读一致；S2CR 写 0（翻译，非 bypass 的 0x20000）。
+- **aperture 注册被 hyp 接受**（returned 0）。
+- **CP 写 CP_SQE_CNTL 仍整机复位**，停在 STATE COMPLETE，无 `came back`。
+
+**关键对照**：bypass 轮（keepalive）与本轮非 bypass 的复位前状态**完全一致**（rbbm_status 0x1、sptprac 0、
+gmu2host intr 0），而两者的 SMMU 路径截然不同（bypass vs 真翻译）。证据：`docs/evidence/2026-10-24-gpu-aperture-xlate.log`。
+
+**这动摇了 aperture/SMMU 假设**：SMMU 走不走翻译、aperture 注没注册，对复位**毫无影响**——复位时序、前置状态都一样。
+强烈暗示：**问题不在 CP 的内存访问是否被 hyp/SMMU 放行，而在 CP 核心「开始执行微码」这个动作本身。** aperture SCM
+虽被接受（调用正确、hyp 认），但它不是缺的那一步；bypass 从来也不是一个「脏」变量。
+
+**重估后的候选（降序）**：
+1. **微码(SQE)本身**：`a650_sqe.fw` 的版本/内容是否真被 CP 接受。§9.5 早期 `adreno_blind=1`（微码放空地址）不复位、
+   有微码才复位——这其实指向**微码一旦开始执行就触发**。可查：Linux a6xx 的 `a6xx_ucode_check_version` /
+   对 sqe fw 的版本门槛；K40 的 `a650_sqe.fw` 是否与本机 GPU 的 fuse/speed-bin 匹配；是否 Mesa 用的 `a650_sqe` 与
+   kgsl 用的不是同一份。
+2. **CP 启动前某个「非 SMMU」的内存授权**：§9 查过 zap 的 PAS；但 ring/微码/scratch 这几块 HLOS 内存,
+   vendor 是否另有 `qcom_scm_assign_mem`（VMID_HLOS→VMID_CP_PIXEL/其它）把它们划给 GPU 的 VMID。
+   `kgsl_sharedmem.c:551` 的 `VMID_HLOS→VMID_CP_PIXEL` 是 secure/pixel 路径，要确认普通 ring/微码是否也需要。
+3. **CP 启动后立刻访问的某个 GPU 子块未上电/未配置**（LPAC、preemption 记录区等 a650 专属）。
+
+aperture 代码保留（`adreno_aperture`、`scm4`）——它是正确的、hyp 接受的，将来走完整路径时仍需要，只是单独不够。
+
+工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
