@@ -1109,6 +1109,53 @@ HFI 消息 id 表见厂商 `kgsl_hfi.h`（H2F_MSG_*）。
 SM8250 的 hyp 对「非厂商 kgsl 发起的 GPU CP 启动」施加了什么额外门槛——这可能需要 SM8250 的 hyp/TZ 侧信息
 （厂商不公开），是这条移植路线在 K40 上的根本难点。
 
+#### 最终展望：越过 QHEE 墙的唯一现实路线——Linux-init-then-handoff（m1n1 式）（2026-10-24）
+
+**根因定性（EL 层面，本会话确证）**：K40 出厂带 Qualcomm 的 EL2 hypervisor（QHEE，`QCOM_QHEE_ENABLE_MEM_PROTECTION`）。
+`xnuloader/loader.c:600` 自己写着「the Qualcomm hypervisor traps the EL1 timer」——**XNU 跑在 EL1，QHEE 在其下 EL2**。
+SM8250 的 **GPU SMMU 配置寄存器是 `SECURE_CFG_ACCESS` / slave-side-secure，由 QHEE 代管**（Linux `arm-smmu.c` 的
+`ARM_SMMU_OPT_SECURE_CFG_ACCESS` + `secure_context_map`）；厂商 Linux 配 GPU SMMU 走的是 **hyp 认识的 SCM 协议**，
+不是裸写寄存器。
+
+**为什么三方内核/PostmarketOS 行、XNU 不行**：三方全是**高通 CAF 派生的 Linux**，带完整 kgsl + arm-smmu-qcom +
+`qcom_scm`，说 QHEE 的全套方言、持证上岗；它们也跑在 EL1、QHEE 一样在下面——处境相同，区别只在「会不会说 QHEE
+的协议」。XNU 的 `redwood_adreno.c` 是**手写裸寄存器**、模仿 Linux 的值（金标准已逐条对齐）但不是 Linux，QHEE
+不认它：step 1-19 是 **CPU 替 GPU 写寄存器**（CPU 访问 QHEE 放行），step 20 `CP_SQE_CNTL=1` 让 **CP 第一次成为自主
+总线主去取微码/ring**，QHEE 的 XPU/SMMU 规则判这个「陌生主」非法 → 整机复位。redwood（SD778G，sc7280 的 hyp
+策略不同）放行、K40（SM8250 QHEE 更严）不放行——同一份代码两种结果，是铁证。
+
+**出路（你的 m1n1 式设想，方向正确且可能是唯一现实路线）**：让**会说 QHEE 方言的 Linux** 把 GPU 初始化到 CP 已在
+跑的「热态」，再 handoff 给 XNU——过 QHEE 关的是 Linux，不是 XNU。精确类比 m1n1 在 Apple Silicon 上「先驯服黑盒
+协处理器/IOMMU、再交给 Linux」。
+
+**核心难点（本会话第七轮已实测暴露）**：第七轮 `adreno_cp_defer` + loader `oem gpustart` 是结构相同的 handoff 实验
+（XNU 带到 CP 前 → 交 loader 写最后一步），**无效**，因为 `loader_return` 关 MMU、切回 UEFI，**GPU 的上电+映射
+状态没跨 handoff 保留**（loader 读 GPU 寄存器全 0）。Linux→XNU 会撞同一问题且更重：热 GPU 的状态还在
+①GMU 固件内部状态、②SMMU context bank 页表（指向 **Linux 的**物理内存）、③CP 正读的 ring/微码（在 Linux 分配、
+QHEE 划给 GPU VMID 的内存）里；XNU handoff 会重建自己的映射、把 Linux 内存当空闲覆盖 → 热 GPU 立刻踩空。
+m1n1 能成是因为它和 Linux **协商好内存交接**（reserved-memory + 交接结构）。所以这**不是「裁剪内核」那么简单，是让
+两个异构内核共享一套内存契约**。
+
+**两种形态与真实代价**：
+- **形态 A（Linux 初始化完、保持运行、XNU 借用）**：Linux 起 GPU/CP 后挂起自己、GPU 内存全 reserved、XNU 不许碰，
+  XNU 往 Linux 建好的 ring 塞命令。要 XNU 里有 **kgsl 内存布局 + GMU 协议兼容层**；两内核半活在一块 RAM，极脆弱。
+- **形态 B（真 m1n1 式：Linux 当 bootloader，init 后 kexec 式跳进 XNU，传「硬件已初始化 + 内存布局」交接结构）**：
+  更干净，但要改 XNU 启动路径（信任传入状态、不自己 init、用传入的 GPU 内存布局）+ 定义交接 ABI + 裁剪 Linux 到
+  只做 GPU init。是个**独立的大工程，可能比整个 XNU 移植本身还大**。
+
+**而且 handoff 只解决「冷启动过关」，解决不了「XNU 持续驱动 GPU」**：handoff 后 XNU 每次命令提交/调频/slumber-wake
+仍要和 GMU（其电源管理最终由 QHEE 授权）打交道——除非 XNU 里真塞进完整 kgsl 兼容层，那又等于把 Linux GPU 栈搬进 XNU。
+
+| 目标 | 可达性 | 代价 |
+|---|---|---|
+| handoff 后一次性画一帧（CP 已在跑，XNU 塞一个命令） | 可能 | 中-大（解决内存交接，比第七轮深得多） |
+| XNU 持续、可用地驱动 GPU | 要 kgsl 兼容层 | 巨大，接近重做 GPU 栈 |
+
+**给下一个接手者**：GPU 这条**不是死胡同，是一条标好代价的出路**。墙在 XNU 之下的 EL2（QHEE），补寄存器永远翻不过
+（17 轮已证）；真正的门是让 Linux 替你过 QHEE 关、再把「热 GPU + 内存契约」交给 XNU。先做形态 B 的最小版（Linux
+只 init GPU 到 CP 跑 + 画一帧的交接），验证内存契约可行，再谈持续驱动。本会话的工具链（`gpu-follow.sh`、
+`gold-trace.sh`、`gold-hfi.sh`、`repack-loader.py`、`adreno_*` 全套开关、金标准 trace/HFI 证据）都为此铺好了路。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
