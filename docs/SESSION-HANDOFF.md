@@ -663,6 +663,40 @@ cpufreq=1 bootcpu=7 cpus=8 adreno_soc=a650 adreno=1 adreno_watch=10
   在 UEFI 环境（loader 里）用同一套寄存器顺序启动 CP，绕开 XNU 的异常/中断环境，判断是否
   XNU 侧（SError/中断）导致的复位。
 
+#### 第四轮：重活 ① 已落地到驱动（2026-10-24，待真机验证）
+
+把 §9.5 结论里排第一的重活——补齐厂商 `a6xx_start()` 的前置写——写进了
+`bsd/dev/redwood_adreno.c` 的 step 20，**全部 gate 在新 boot-arg 后面，默认路径（step 1–19 与
+原 step 20）一字节不变**：
+
+- 新增 `core_vendor_prelude()`，在 `CP_SQE_CNTL` 之前、按厂商顺序做三件事：
+  `a6xx_set_hwcg`（先 4 个 GMU AO CGC 字，再 49 条 GPU 簇时钟门控，最后 `RBBM_CLOCK_CNTL=0x8AA8AA82`
+  ——a650 的顶层使能值，**不是 1**）、`a6xx_protect_init`（`CP_PROTECT_CNTL=0xB` + 保护表）、
+  a650 的 `TPL1_BICUBIC_WEIGHTS_*`（5 个）。
+- Boot-arg：`adreno_fullstart=1` 开总开关；`adreno_hwcg=0` / `adreno_protect=0` /
+  `adreno_bicubic=0` 各自单独关一块——**这让“补齐 a6xx_start”从一次性赌注变成可二分的真机实验**：
+  若某一块加上去 CP 就不复位，就能定位到底是门控、保护表还是权重缺失致命。
+- **三张表现在是实数值**（`ADRENO_VENDOR_TABLES 1`），来源是用户指向的真机厂商内核
+  `/home/koto/Projects/tmp/android_kernel_xiaomi_sm8250/drivers/gpu/msm`（下游 kgsl，不是 mesa/DRM）：
+  - HWCG：`adreno-gpulist.h` 的 `a650_hwcg_regs[]`（49 条）+ `a6xx_set_hwcg()` 的 4 个 GMU CGC 字
+    （a650 值 `mode 0x00020202 / delay 0x00010111 / hyst 0x00005555 / wfi 0x00000002`）；
+  - 保护表：K40 的 a650 core **复用 `a620_protected_regs[]`**（gpulist.h 的 `.protected_regs = a620_protected_regs`），
+    34 条（下标 0–32 再跳 47），编码 `(start&0x3ffff) | ((end-start & 0x1fff)<<18) | (noaccess<<31)`
+    ——注意 count 掩码是 **0x1fff（13 位）**；
+  - bicubic：`a6xx_set_ubwc_config()` 里硬编码 `0 / 0x3FE05FF4 / 0x3FA0EBEE / 0x3F5193ED / 0x3F0243F0`，
+    寄存器基址 **`0xB608`**（a6xx_reg.h；曾凭记忆误记为 0xB2C0，此坑已由真机源码纠正）。
+  - 偏移换算：GPU 侧 `GPU_WORD = kgsl偏移`（块基址 0x03d00000）；GMU 侧
+    `GMU_WORD(n) = kgsl偏移 − 0x1a800`（已用 SPTPRAC/HFI 等 4 个已知寄存器核对一致）。
+  - HWCG 表由 `tools/gen_hwcg.py` 从上述两文件机械 join 生成（偏移不是手敲），且已 diff 验证
+    生成结果与落库表逐字节一致。
+- **仍需在有工具链的机器上做**：①同步到构建树那份 `redwood_adreno.c`（overlay + build tree 两份，§7）；
+  ②编核、重打载荷、刷机验证。真机顺序建议：先 `adreno_fullstart=1 adreno_protect=0 adreno_bicubic=0`
+  （只加门控）→ 再逐块加回，二分定位。日志参数沿用 §9.5 的
+  `adreno=20 adreno_direct=1 adreno_return=1` + 250 ms note 的 `alioth-boot2.img`。
+- 风险提示：若 `adreno_fullstart` 反而更早复位，最可疑是 HWCG 里 4 个 **GMU_GX** 时钟字
+  （`0x0118/0x0119/0x011a`，GX 域）——厂商写它们时 GX 已由 OOB/SPTPRAC 托住，而本机这两条路走不通
+  （§9.5 第二轮）。可用 `adreno_hwcg=0` 先排除，或只跳过这 3 个 GX 字再试。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：

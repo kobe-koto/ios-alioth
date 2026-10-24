@@ -100,6 +100,13 @@
  *                      the older interrupt bits
  *   adreno_rptr=1      step 20 gives the core's read pointer a page of ours and leaves CP_RB_CNTL's
  *                      "write nothing back" bit clear, as the vendor does for a GPU with APRIV
+ *   adreno_fullstart=1 step 20 makes the rest of the vendor's a6xx_start before the command
+ *                      processor is started: clock-gate every cluster (a6xx_set_hwcg), the 32-entry
+ *                      register-protection table (a6xx_set_cp_protect), and the a650's bicubic
+ *                      weights. adreno_hwcg=0 / adreno_protect=0 / adreno_bicubic=0 drop one, to
+ *                      bisect which the started command processor needs (SESSION-HANDOFF.md 9.5).
+ *                      The tables are filled from the vendor reference on the build box; while they
+ *                      are empty this writes nothing (a safe no-op, the ordering only)
  *   adreno_zap_first=1 step 19 (the zap shader) is performed before step 17, before the 3D core
  *                      is powered, instead of after everything
  *   adreno_watch=S     after the last step, say once a second for S seconds (default 20) that
@@ -2716,6 +2723,99 @@ step_core_power(void)
 #define RBBM_SECVID_TSB_ADDR_MODE_CNTL GPU_WORD(0xf810)
 #define CP_RB_CNTL_VALUE        (12u | 2u << 8 | 1u << 27)      /* 2^12 pairs of words; do not copy the read position to memory */
 
+/*
+ * The writes the vendor's a6xx_start()/a6xx_hw_init() makes that this driver has never made, each
+ * gated so the known-good path (step 1-19, and the plain step 20) is byte-for-byte what it was:
+ * adreno_fullstart=1 makes all of them before CP_SQE_CNTL; adreno_hwcg=0 / adreno_protect=0 /
+ * adreno_bicubic=0 leave one out, so a run can bisect which (if any) keeps the command processor
+ * alive once it is started (SESSION-HANDOFF.md 9.5: the write to CP_SQE_CNTL is the one that
+ * resets this phone, and the vendor's a6xx_start does all of the below before it).
+ *
+ * THE TABLES BELOW ARE EMPTY ON PURPOSE. The values are per-SoC and must be transcribed from the
+ * phone's own vendor source, which is NOT in this delivery package -- it is on the build box at
+ * alioth-gpu-port/reference/vendor-msm/ (adreno_a6xx.c, a6xx_reg.h) and Linux a6xx_gpu.c:
+ *   - a650_hwcg[]    <- a6xx_set_hwcg()'s a650 clock-gating table (~20 RBBM_CLOCK_* word/value pairs)
+ *   - a650_protect[] <- a6xx_set_cp_protect()'s a650_protect[] (CP_PROTECT_CNTL=0xB + 32 entries),
+ *                       with that file's A6XX_PROTECT_RDONLY/NORDWR macro encoding copied verbatim
+ *   - bicubic        <- a6xx_set_ubwc_config()'s five TPL1_BICUBIC_WEIGHTS_TABLE_* writes (a650 only)
+ * A wrong offset into an unclocked block is itself a reset -- do not guess these. With the tables
+ * empty, adreno_fullstart runs the ordering/logging but writes nothing, which is a safe no-op until
+ * they are filled in on the box that has the reference.
+ */
+#define CP_PROTECT_CNTL         GPU_WORD(0x084f)
+#define CP_PROTECT_REG          GPU_WORD(0x0850)        /* + the entry's index: a620_protected_regs is not dense */
+#define TPL1_BICUBIC_WEIGHTS_TABLE_0 GPU_WORD(0xb608)   /* a650 only; five consecutive words (a6xx_reg.h) */
+
+/*
+ * Transcribed from the phone's own vendor kgsl (the tree at drivers/gpu/msm: adreno-gpulist.h's
+ * a650_hwcg_regs[] and a620_protected_regs[] -- the K40's a650 core shares the a620 protect table;
+ * adreno_a6xx.c a6xx_set_ubwc_config()'s bicubic writes; offsets resolved against a6xx_reg.h).
+ * The GPU-side words are that block's offset / 4; the four GMU CGC words are the GMU block's,
+ * GMU_WORD(n) = (kgsl offset - 0x1a800). The HWCG table was joined by tools/gen_hwcg.py so the
+ * offsets are the vendor's, not retyped.
+ */
+#define ADRENO_VENDOR_TABLES    1
+
+struct reg_write { uint32_t word, value; };
+
+/* a6xx_set_hwcg(): the four GMU AO clock-gating words (a650 values, not a612/a615), written to the
+ * GMU block, before the GPU table. Kept apart because they are the GMU's, not the GPU's. */
+static const struct reg_write a650_hwcg_gmu[] = {
+	{ 0x9309, 0x00020202 },         /* GPU_GMU_AO_GMU_CGC_MODE_CNTL  (kgsl 0x23b09) */
+	{ 0x930a, 0x00010111 },         /* GPU_GMU_AO_GMU_CGC_DELAY_CNTL (kgsl 0x23b0a) */
+	{ 0x930b, 0x00005555 },         /* GPU_GMU_AO_GMU_CGC_HYST_CNTL  (kgsl 0x23b0b) */
+	{ 0x5002, 0x00000002 },         /* GMU_CX_GMU_WFI_CONFIG         (kgsl 0x1f802) */
+};
+
+/* a650_hwcg_regs[] (adreno-gpulist.h): every cluster's clock-gating, all GPU-block words.
+ * generated from vendor kgsl: 49 rows (tools/gen_hwcg.py) */
+static const struct reg_write a650_hwcg[] = {
+	{ 0x00b0, 0x02222222 }, { 0x00b4, 0x02222220 }, { 0x00b8, 0x00000080 }, { 0x00bc, 0x0000F3CF },
+	{ 0x00c0, 0x02222222 }, { 0x00c4, 0x22222222 }, { 0x00c8, 0x22222222 }, { 0x00cc, 0x00022222 },
+	{ 0x00d0, 0x11111111 }, { 0x00d4, 0x11111111 }, { 0x00d8, 0x11111111 }, { 0x00dc, 0x00011111 },
+	{ 0x00e0, 0x77777777 }, { 0x00e4, 0x77777777 }, { 0x00e8, 0x77777777 }, { 0x00ec, 0x00077777 },
+	{ 0x00f0, 0x22222222 }, { 0x00f4, 0x01002222 }, { 0x00f8, 0x00002220 }, { 0x0100, 0x00040F00 },
+	{ 0x0104, 0x25222022 }, { 0x0105, 0x00005555 }, { 0x0106, 0x00000011 }, { 0x0107, 0x00445044 },
+	{ 0x0108, 0x04222222 }, { 0x0111, 0x00002222 }, { 0x0114, 0x00222222 }, { 0x0117, 0x00000002 },
+	{ 0x011b, 0x00002222 }, { 0x0109, 0x00004000 }, { 0x0112, 0x00002222 }, { 0x0115, 0x00000200 },
+	{ 0x011c, 0x00000000 }, { 0x010a, 0x00000000 }, { 0x0113, 0x00000000 }, { 0x0116, 0x04104004 },
+	{ 0x011d, 0x00000000 }, { 0x0120, 0x00000222 }, { 0x0121, 0x00000111 }, { 0x0122, 0x00000777 },
+	{ 0x010b, 0x22222222 }, { 0x0110, 0x00000004 }, { 0x010f, 0x00000002 }, { 0x0533, 0x00000182 },
+	{ 0x0044, 0x00000000 }, { 0x0042, 0x00000000 }, { 0x0118, 0x00000222 }, { 0x0119, 0x00000111 },
+	{ 0x011a, 0x00000555 },
+};
+#define RBBM_CLOCK_CNTL_ON_A650 0x8AA8AA82u     /* __get_rbbm_clock_cntl_on(): a650's top-level enable */
+
+/* a620_protected_regs[] (adreno-gpulist.h; the K40's a650 core uses it): each is the entry's index
+ * into CP_PROTECT_REG, the first and last word of the span, and whether even reads fault. The table
+ * is not dense -- indices run 0..32 then 47 -- so the index is kept with each row. */
+struct protect_span { uint8_t index; uint32_t start, end; uint8_t noaccess; };
+static const struct protect_span a650_protect[] = {
+	{  0, 0x00000, 0x004ff, 0 }, {  1, 0x00501, 0x00506, 0 }, {  2, 0x0050b, 0x007ff, 0 },
+	{  3, 0x0050e, 0x0050e, 1 }, {  4, 0x00510, 0x00510, 1 }, {  5, 0x00534, 0x00534, 1 },
+	{  6, 0x00800, 0x00882, 1 }, {  7, 0x008a0, 0x008a8, 1 }, {  8, 0x008ab, 0x008cf, 1 },
+	{  9, 0x008d0, 0x0098c, 0 }, { 10, 0x00900, 0x0094d, 1 }, { 11, 0x0098d, 0x00bff, 1 },
+	{ 12, 0x00e00, 0x00e01, 1 }, { 13, 0x00e03, 0x00e0f, 1 }, { 14, 0x03c00, 0x03cc3, 1 },
+	{ 15, 0x03cc4, 0x05cc3, 0 }, { 16, 0x08630, 0x087ff, 1 }, { 17, 0x08e00, 0x08e00, 1 },
+	{ 18, 0x08e08, 0x08e08, 1 }, { 19, 0x08e50, 0x08e6f, 1 }, { 20, 0x08e80, 0x090ff, 1 },
+	{ 21, 0x09624, 0x097ff, 1 }, { 22, 0x09e60, 0x09e71, 1 }, { 23, 0x09e78, 0x09fff, 1 },
+	{ 24, 0x0a630, 0x0a7ff, 1 }, { 25, 0x0ae02, 0x0ae02, 1 }, { 26, 0x0ae50, 0x0b17f, 1 },
+	{ 27, 0x0b604, 0x0b604, 1 }, { 28, 0x0b608, 0x0b60f, 1 }, { 29, 0x0be02, 0x0be03, 1 },
+	{ 30, 0x0be20, 0x0d5ff, 1 }, { 31, 0x0f000, 0x0fbff, 1 }, { 32, 0x0fc00, 0x11bff, 0 },
+	{ 47, 0x11c00, 0x11c00, 1 },
+};
+/* a6xx_protect_init(): (start & 0x3ffff) | ((end-start & 0x1fff) << 18) | (noaccess << 31) */
+static uint32_t
+protect_word(const struct protect_span *s)
+{
+	return (s->start & 0x3ffffu) | (((s->end - s->start) & 0x1fffu) << 18) | ((uint32_t)s->noaccess << 31);
+}
+
+/* a6xx_set_ubwc_config(): the a650's five bicubic sampling weights, in order from TABLE_0 */
+static const uint32_t a650_bicubic[] = { 0, 0x3FE05FF4, 0x3FA0EBEE, 0x3F5193ED, 0x3F0243F0 };
+
+#define ADRENO_COUNT(a)         (ADRENO_VENDOR_TABLES ? sizeof(a) / sizeof((a)[0]) : 0u)
+
 /* commands (Mesa's adreno_pm4.xml); a packet is a header word and so many more */
 #define CP_NOP                  0x10
 #define CP_WAIT_FOR_IDLE        0x26
@@ -3015,6 +3115,53 @@ step_zap_load(void)
 
 /* ---- step 20: the 3D core's registers, its command processor started, its first command ------------------- */
 
+/*
+ * The part of the vendor's a6xx_start()/a6xx_hw_init() this driver has not made (SESSION-HANDOFF.md
+ * 9.5, the remaining "heavy work"): clock-gating every cluster (a6xx_set_hwcg: the GMU AO words,
+ * then every GPU cluster, then the top-level enable), the register-protection table
+ * (a6xx_protect_init: CP_PROTECT_CNTL=0xB + the a620 spans the a650 shares), and the a650's bicubic
+ * sampling weights (a6xx_set_ubwc_config). Each is left out of the plain step 20 so that path stays
+ * what the phone has already run; adreno_fullstart=1 makes all three, and adreno_hwcg=0 /
+ * adreno_protect=0 / adreno_bicubic=0 drop one so a run can bisect which the started command
+ * processor needs. The values are the phone's own, from its vendor kgsl (see the tables above).
+ */
+static void
+core_vendor_prelude(void)
+{
+	uint32_t full = 0, hwcg = 1, protect = 1, bicubic = 1;
+
+	if (!PE_parse_boot_argn("adreno_fullstart", &full, sizeof(full)) || full == 0) {
+		return;
+	}
+	PE_parse_boot_argn("adreno_hwcg", &hwcg, sizeof(hwcg));
+	PE_parse_boot_argn("adreno_protect", &protect, sizeof(protect));
+	PE_parse_boot_argn("adreno_bicubic", &bicubic, sizeof(bicubic));
+
+	if (hwcg && ADRENO_COUNT(a650_hwcg)) {
+		announce("clock-gate the GMU AO and every GPU cluster as a6xx_set_hwcg does, then the top-level enable");
+		for (unsigned i = 0; i < ADRENO_COUNT(a650_hwcg_gmu); i++) {
+			put(&gmu, "gmu_cgc", GMU_WORD(a650_hwcg_gmu[i].word), a650_hwcg_gmu[i].value);
+		}
+		for (unsigned i = 0; i < ADRENO_COUNT(a650_hwcg); i++) {
+			put(&gpu, "rbbm_clock", GPU_WORD(a650_hwcg[i].word), a650_hwcg[i].value);
+		}
+		put(&gpu, "rbbm_clock_cntl", RBBM_CLOCK_CNTL, RBBM_CLOCK_CNTL_ON_A650);
+	}
+	if (protect && ADRENO_COUNT(a650_protect)) {
+		announce("set the register-protection table the vendor's a6xx_protect_init does (a620 spans, the a650's)");
+		put(&gpu, "cp_protect_cntl", CP_PROTECT_CNTL, 0x1u << 3 | 0x1u << 1 | 0x1u);   /* 0xB: on, access-fault, last-span */
+		for (unsigned i = 0; i < ADRENO_COUNT(a650_protect); i++) {
+			put(&gpu, "cp_protect_reg", CP_PROTECT_REG + 4 * a650_protect[i].index, protect_word(&a650_protect[i]));
+		}
+	}
+	if (bicubic && ADRENO_COUNT(a650_bicubic)) {
+		announce("write the a650's five bicubic sampling weights (a6xx_set_ubwc_config)");
+		for (unsigned i = 0; i < ADRENO_COUNT(a650_bicubic); i++) {
+			put(&gpu, "tpl1_bicubic_weight", TPL1_BICUBIC_WEIGHTS_TABLE_0 + 4 * i, a650_bicubic[i]);
+		}
+	}
+}
+
 static bool
 step_core_start(void)
 {
@@ -3121,6 +3268,10 @@ step_core_start(void)
 	}
 	put(&gpu, "cp_apriv_cntl", CP_APRIV_CNTL, 1u << 6 | 1u << 5 | 1u << 3 | 1u << 2 | 1u << 1);
 	put(&gpu, "rb_dbg_eco_cntl", RB_DBG_ECO_CNTL, soc->rb_dbg_eco);     /* Mesa's value for this GPU */
+	/* adreno_fullstart=1: the rest of the vendor's a6xx_start -- clock-gating, register protection,
+	 * the a650's bicubic weights -- which the plain path above has never made (see the comment and
+	 * tables by CP_RB_CNTL_VALUE). Before the command processor is started, like the vendor. */
+	core_vendor_prelude();
 	/*
 	 * adreno_blind=1: the command processor is started with its microcode at an address where
 	 * nothing is. All it can do then is ask the SMMU for it, and the SMMU's record of the refusal
