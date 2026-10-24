@@ -107,6 +107,9 @@
  *                      bisect which the started command processor needs (SESSION-HANDOFF.md 9.5).
  *                      The tables are filled from the vendor reference on the build box; while they
  *                      are empty this writes nothing (a safe no-op, the ordering only)
+ *   adreno_busycnt=1   (default, within adreno_fullstart) enable GMU power counter 0 to count GPU
+ *                      busy before the CP starts (a6xx_start does it for all a6xx: CX_BUSY_MASK +
+ *                      counter select/enable). =0 leaves it out
  *   adreno_zap_first=1 step 19 (the zap shader) is performed before step 17, before the 3D core
  *                      is powered, instead of after everything
  *   adreno_watch=S     after the last step, say once a second for S seconds (default 20) that
@@ -3158,7 +3161,7 @@ step_zap_load(void)
 static void
 core_vendor_prelude(void)
 {
-	uint32_t full = 0, hwcg = 1, protect = 1, bicubic = 1;
+	uint32_t full = 0, hwcg = 1, protect = 1, bicubic = 1, busycnt = 1;
 
 	if (!PE_parse_boot_argn("adreno_fullstart", &full, sizeof(full)) || full == 0) {
 		return;
@@ -3166,6 +3169,7 @@ core_vendor_prelude(void)
 	PE_parse_boot_argn("adreno_hwcg", &hwcg, sizeof(hwcg));
 	PE_parse_boot_argn("adreno_protect", &protect, sizeof(protect));
 	PE_parse_boot_argn("adreno_bicubic", &bicubic, sizeof(bicubic));
+	PE_parse_boot_argn("adreno_busycnt", &busycnt, sizeof(busycnt));
 
 	if (hwcg && ADRENO_COUNT(a650_hwcg)) {
 		announce("clock-gate the GMU AO and every GPU cluster as a6xx_set_hwcg does, then the top-level enable");
@@ -3189,6 +3193,23 @@ core_vendor_prelude(void)
 		for (unsigned i = 0; i < ADRENO_COUNT(a650_bicubic); i++) {
 			put(&gpu, "tpl1_bicubic_weight", TPL1_BICUBIC_WEIGHTS_TABLE_0 + 4 * i, a650_bicubic[i]);
 		}
+	}
+	if (busycnt) {
+		/*
+		 * Enable GMU power counter 0 to count "GPU busy" -- the vendor's a6xx_start does this for ALL
+		 * a6xx right before a6xx_protect_init (adreno_a6xx.c): CX_BUSY_MASK=0xff000000, then select 0x20
+		 * into POWER_COUNTER_SELECT_0's low byte, then POWER_COUNTER_ENABLE=1. This driver never did it.
+		 * The GMU manages the GPU's power from this busy signal; the gold trace (tools/gold-trace.sh)
+		 * shows kgsl sets all three before starting the CP. The leading guess after the register diff:
+		 * once the CP starts and the core goes busy, a GMU whose busy counter was never set up makes a
+		 * wrong power decision and the SoC resets. adreno_busycnt=0 leaves it out to confirm by contrast.
+		 */
+		uint32_t sel;
+		announce("enable GMU power counter 0 to count GPU busy (a6xx_start: CX_BUSY_MASK + counter select/enable)");
+		put(&gmu, "gpu_cx_busy_mask", GMU_WORD(0x930e), 0xff000000);
+		sel = (rd(gmu.base + GMU_WORD(0x5041)) & ~0xffu) | 0x20;
+		put(&gmu, "power_counter_select_0", GMU_WORD(0x5041), sel);
+		put(&gmu, "power_counter_enable", GMU_WORD(0x5040), 1);
 	}
 }
 
