@@ -790,11 +790,37 @@ loader 读到全 0，那条写根本没落到活着的 GPU 上。所以「没复
 `oem gpustart`、以及 `tools/repack-loader.py`（把新 loader 换进能用的 alioth 镜像——绕开 alioth BootShim 的
 FD_BASE 固化问题，见该文件注释）。
 
-#### 第八轮（进行中）：XNU 侧屏蔽中断再写 CP_SQE_CNTL
+#### 第八轮：XNU 侧屏蔽中断再写 CP_SQE_CNTL——**仍复位，中断/SError 排除**（2026-10-24）
 
-比 UEFI 重放轻得多、且全在 XNU 内：写 `CP_SQE_CNTL` **之前**先屏蔽所有中断（本地 DAIF + GIC），并给 SError
-一个「记录而非复位」的落点。若屏蔽后写 CP **不复位**→复位由中断引起；若**仍复位**→排除中断，指向 SError 或硬件。
-用现成 `gpu-follow.sh` 捕获，不碰 loader。
+全在 XNU 内（UEFI 重放那条因交接不成立作罢）：`adreno_mask_irq=N` 在写 `CP_SQE_CNTL` 前屏蔽本核 DAIF
+（1=IRQ+FIQ，2=再加 SError/async abort），存活则写后恢复 DAIF 让被推迟的 SError 此刻触发。三种结果可区分：
+存活(SURVIVED) / 恢复时才炸(延迟 SError) / 全屏蔽仍复位(非本核异常，是硬件/hyp)。
+
+- **踩坑并修正**：第一次 `mask_irq=2` 在屏蔽态下调了 `printf`，撞上 XNU 的
+  `Console I/O from interrupt-disabled context @serial_console.c:168` assert → panic（是测试代码自己造成的，
+  不是 GPU）。改为：屏蔽**窗口内只做裸 `wr()` + `dsb` + 纯 spin，零 printf/sleep_ms**，恢复 DAIF 后再打印。
+- **真机结果（`adreno_mask_irq=2`，IRQ+FIQ+SError 全屏蔽）**：日志干净停在 `STATE COMPLETE`，**无 SURVIVED、
+  无 panic、无 stackshot**，手机复位回 Android。复位太快，连屏蔽后的 `about to write` 行都没 flush 出去。
+  证据：`docs/evidence/2026-10-24-gpu-maskirq.log`。
+
+**结论：全屏蔽本核所有异步异常，写 CP_SQE_CNTL 照样复位 → 不是本核取的 IRQ/FIQ/SError。是硬件/hypervisor
+复位整个 SoC。** 中断/异常这条线排除。
+
+**至此 §9.5 的两条「剩余方向」都已处理：** UEFI 重放（第七轮，交接不成立、无效）、XNU 中断（第八轮，排除）。
+复位的性质现在非常明确：**CP 微码一开始取指/执行，SoC 层面（PMIC `hw_reset`）就复位，CPU 侧既非电源问题
+（GMU 侧全排除）亦非异常问题（中断/SError 排除）。** 这几乎只剩一种解释——**hypervisor/XPU/TrustZone 在
+「CP（带 APRIV 的总线主）首次自主发起总线访问去取微码/ring」这一刻，判定为非法并复位 SoC**。
+
+**下一步建议（都针对「首次总线访问被拦」这个收窄后的假设）：**
+1. **让 CP 的取指目标落在一块「绝对干净」的内存**：现在用 `adreno_direct=1`（`kvtophys` 取物理地址、SMMU bypass）。
+   可试 `adreno_direct=0` 走正常 SMMU 翻译，或反过来确认 ring/微码所在内存的 stage-2/XPU 归属（§9.5 已部分查过
+   SMMU，但那是 CP *翻译*，不是 CP *作为总线主第一次发起*时 hyp 的裁决）。
+2. **Android 侧取证**：K40 的 Android dmesg 里 kgsl 首次启动 GPU 时若有 hyp/XPU 相关打印（`gh_`、`qcom,hyp`、
+   `SMMU`、`XPU`、`scm` 的 GPU 内存授权），对照它启动 CP 前做了哪一步本驱动没做的「内存授权」SCM 调用。
+   厂商 `adreno_a6xx.c` 的 `a6xx_rb_start` 之前若有 `kgsl_hyp_assign` / `qcom_scm_assign_mem` 类调用，即是关键。
+3. 若 2 找到某个「把 ring/微码内存授权给 GPU/hyp」的 SCM，那才是真正缺的一步——它和 zap 的 SCM 是两码事。
+
+工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
