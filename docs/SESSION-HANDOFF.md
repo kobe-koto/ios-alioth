@@ -1053,6 +1053,45 @@ XPU 属性**（CP 取指拿到的字节/权限）；③微码执行时碰到的�
 2. **ring/微码内存属性**：确认 CP 取指的内存 stage-2/XPU 归属是否需要 `qcom_scm_assign_mem`（VMID 转移）。
 3. 精确解码 PMIC `reason1 0x2`（需读 loader 的 PMIC 读取实现）。
 
+#### 第十七轮：HFI 消息流比对——金标准冷启序列里本驱动缺 FEATURE_CTRL(LM) + SET_VALUE（2026-10-24，真机）
+
+KSU root 下 kgsl 有 `kgsl_hfi_send`/`kgsl_hfi_receive` tracepoint（给 id/size/seq）。`tools/gold-hfi.sh`
+（stop surfaceflinger/stop 逼 GMU 冷启）抓到金标准 a650 冷启的 HFI 启动序列（到 START）：
+
+| id | = | HFI 消息 | size | 本驱动 step17 发？ |
+|---|---|---|---|---|
+| 0x4 | 4 | PERF_TBL | 0x3b | ✅ |
+| 0x3 | 3 | BW_TBL | 0xa0 | ✅ |
+| **0xb** | 11 | **FEATURE_CTRL** | 0x4 | ❌ **没发** |
+| **0xd** | 13 | **SET_VALUE** | 0x4 | ❌ **没发** |
+| 0xe | 14 | CORE_FW_START | 0x2 | ✅ |
+| 0x1e | 30 | GX_BW_PERF_VOTE | 0x4 | ✅ ×2 |
+| 0xa | 10 | START | 0x1 | ✅ |
+
+**坐实的差异**：金标准在 CORE_FW_START **之前**发 `FEATURE_CTRL` + `SET_VALUE`，本驱动这两条都没发。
+成因：真机 `/sys/class/kgsl/kgsl-3d0/lm=1`（LM，Limits Management 启用）→ `hfi_send_lm_feature_ctrl` 发
+`FEATURE_CTRL(feature=HFI_FEATURE_LM=7, enable=1, data=throttle_mask)` + `SET_VALUE(type=HFI_VALUE_LM_CS0=115,
+data=lm_slope)`。size=0x4 dwords 与 `hfi_feature_ctrl_cmd`/`hfi_set_value_cmd`（各 4 dword）吻合。
+这是 **trace 层面在启动序列里查到的唯一实质差异**（HFI 消息；PERF/BW/CORE_FW_START/GX_BW/START 本驱动都对上）。
+
+**诚实评估（为何没有贸然实现）**：
+- LM 是功耗限制特性，**逻辑上不太像「CP 一启动就 SoC 复位」的主因**（LM 管温度/调频，不管 CP 微码启动）。
+- `SET_VALUE` 的 `data=lm_slope` 来自 GPU 熔丝/dt（`adreno.c:1450` 读 `qcom,...lm`），`FEATURE_CTRL` 的
+  `data=throttle_mask=GENMASK(num_pwrlevels-1,...)`——这两个值本驱动**拿不到准确来源**，用错的值发给 GMU 固件
+  可能让它进半配置状态、反而更糟。坚持「不拍脑袋用不确定的值」，故本轮**只确证差异、未实现**。
+
+**下次可低成本试（具体起点）**：
+- 先发**纯 FEATURE_CTRL(LM, enable=0, data=0)**——明确告诉 GMU「LM 关闭」，这是安全的（不引入坏值，只是声明
+  特性关闭），看 GMU 是否 ACK、CP 启动是否改变。若要 enable=1，需先搞到 `lm_slope`（可从真机
+  `kgsl_hfi_send id=0xd` 的 trace **payload** 读——当前 tracepoint 只给 id/size，需 `trace` 的 raw 或给厂商内核
+  加 payload 打印；或读 fuse `qfprom` LM 槽，本驱动 step2 已有读 qfprom 能力）。
+- 真机 trace 的 raw payload：`kgsl_hfi_send` 只报 id/size/seq，消息体要另抓（HFI queue 在内存，可加 kprobe 或
+  读 `/sys/kernel/tracing` 的 raw event + 自定义；或厂商内核 printk 重编）。拿到 `0xb`/`0xd` 的 4 dword 内容
+  就能逐字节复现。
+
+证据：`docs/evidence/2026-10-24-gold-hfi-coldstart.trace`；采集脚本 `tools/gold-hfi.sh`。
+HFI 消息 id 表见厂商 `kgsl_hfi.h`（H2F_MSG_*）。
+
 #### 补注：为什么 redwood 行、K40 不行——参照应是 redwood，不是 a640（2026-10-24）
 
 问「Adreno 640 实现有无参考价值」时的澄清：

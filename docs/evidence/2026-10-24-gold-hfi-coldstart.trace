@@ -1,0 +1,1199 @@
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 1181/4849   #P:8
+#
+#                              _-----=> irqs-off
+#                             / _----=> need-resched
+#                            | / _---=> hardirq/softirq
+#                            || / _--=> preempt-depth
+#                            ||| /     delay
+#           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+#              | |       |   ||||       |         |
+    RenderEngine-8710  [004] ....  1452.986447: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0xf6f
+    RenderEngine-8710  [004] ....  1452.986561: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0xf6f
+    RenderEngine-8710  [004] ....  1452.986562: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0xf70
+    RenderEngine-8710  [004] ....  1452.986672: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0xf70
+    RenderEngine-8710  [004] ....  1452.986673: kgsl_hfi_send: id=0xb size=0x4 seqnum=0xf71
+    RenderEngine-8710  [004] ....  1452.986783: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0xf71
+    RenderEngine-8710  [004] ....  1452.986784: kgsl_hfi_send: id=0xd size=0x4 seqnum=0xf72
+    RenderEngine-8710  [004] ....  1452.986894: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0xf72
+    RenderEngine-8710  [004] ....  1452.986895: kgsl_hfi_send: id=0xe size=0x2 seqnum=0xf73
+    RenderEngine-8710  [004] ....  1452.987005: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0xf73
+    RenderEngine-8710  [004] ....  1452.987007: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0xf74
+    RenderEngine-8710  [004] ....  1452.987221: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0xf74
+    RenderEngine-8710  [004] ....  1452.987369: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0xf75
+    RenderEngine-8710  [004] ....  1452.987483: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0xf75
+    RenderEngine-8710  [004] ....  1452.987535: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+    RenderEngine-8710  [004] ....  1452.987766: kgsl_gmu_oob_set: mask=0x40000000
+    RenderEngine-8710  [004] ....  1452.987767: kgsl_hfi_send: id=0xa size=0x1 seqnum=0xf76
+    RenderEngine-8710  [004] ....  1452.987877: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0xf76
+    RenderEngine-8710  [004] ....  1452.988003: kgsl_gmu_oob_clear: mask=0x80000000
+    RenderEngine-8710  [004] ....  1452.988005: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.034851: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.035417: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.035890: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.037814: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.043598: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.044812: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.046884: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.047806: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.048757: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.049067: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.050059: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.051079: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.052229: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.053255: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.054138: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.054949: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.055762: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.056658: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.057897: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.059105: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.060296: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.061419: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.061942: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.062119: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.062279: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.062465: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.067824: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.070024: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.071771: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.073201: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.074140: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.074916: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.075641: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.076437: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.077280: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.078069: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.078891: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.079667: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.080411: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.081149: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.081895: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.082596: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.083462: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.084296: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.085125: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.085956: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.086587: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.087390: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.088965: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.089897: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.091097: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.092234: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.092622: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.093422: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.095971: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.097702: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.100277: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.101189: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.101413: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.102411: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.103058: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.104323: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.105269: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.106416: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.107184: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.108576: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.109759: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.110696: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.110848: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.111007: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.111619: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.114079: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.115561: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.116873: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.117580: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.118988: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.119703: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.120511: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.121306: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.122255: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.123154: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.124128: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [004] ....  1453.124992: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+##### CPU 6 buffer started ####
+    RenderEngine-8710  [006] ....  1453.128174: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.129392: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.130804: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.132160: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.132772: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.134242: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.135503: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.137102: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.138584: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.139936: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.141316: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.142931: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.144282: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.145931: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.147541: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.149178: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.150718: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.152653: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.154082: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.155817: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.157406: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.158923: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.160503: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.163500: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+    RenderEngine-8710  [006] ....  1453.164897: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+##### CPU 7 buffer started ####
+   BootAnimation-8756  [007] ....  1453.194733: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1453.248289: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+##### CPU 5 buffer started ####
+   BootAnimation-8756  [005] ....  1453.365640: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1453.399434: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [004] ....  1453.484041: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1453.551669: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1453.687334: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1453.771301: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [004] ....  1453.856800: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [004] ....  1453.907768: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [004] ....  1453.941360: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1453.973978: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [006] ....  1454.008399: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [006] ....  1454.126694: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [006] ....  1454.194308: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [004] ....  1454.228095: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1454.296392: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1454.397481: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1454.431818: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1454.584948: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1454.618893: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1454.668304: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [006] ....  1454.735613: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1454.887985: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [005] ....  1454.956220: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1455.008008: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [007] ....  1455.041597: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [004] ....  1455.107897: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [006] ....  1455.167004: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   BootAnimation-8756  [006] ....  1455.246834: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+##### CPU 1 buffer started ####
+ kgsl_worker_thr-333   [001] ....  1455.909241: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x3d0
+ kgsl_worker_thr-333   [001] ....  1455.909374: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x3d0
+ kgsl_worker_thr-333   [001] ....  1455.909378: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x3d1
+ kgsl_worker_thr-333   [001] ....  1455.909512: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x3d1
+ kgsl_worker_thr-333   [001] ....  1455.909520: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x3d2
+ kgsl_worker_thr-333   [001] ....  1455.909775: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x3d2
+ kgsl_worker_thr-333   [001] ....  1455.909781: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x3d3
+ kgsl_worker_thr-333   [001] ....  1455.909913: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x3d3
+ kgsl_worker_thr-333   [001] ....  1455.910232: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1455.910546: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1455.910550: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x3d4
+ kgsl_worker_thr-333   [001] ....  1455.910684: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x3d4
+ kgsl_worker_thr-333   [001] ....  1455.910944: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1455.910994: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+ kgsl_worker_thr-333   [001] ....  1455.943067: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x3e6
+ kgsl_worker_thr-333   [001] ....  1455.943235: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1455.943264: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+ kgsl_worker_thr-333   [001] ....  1456.028206: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x407
+ kgsl_worker_thr-333   [001] ....  1456.028210: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x408
+ kgsl_worker_thr-333   [001] ....  1456.028334: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x408
+ kgsl_worker_thr-333   [001] ....  1456.028338: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x409
+ kgsl_worker_thr-333   [001] ....  1456.028574: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x409
+ kgsl_worker_thr-333   [001] ....  1456.028578: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x40a
+ kgsl_worker_thr-333   [001] ....  1456.028698: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x40a
+ kgsl_worker_thr-333   [001] ....  1456.028782: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.029041: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.029043: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x40b
+ kgsl_worker_thr-333   [001] ....  1456.029162: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x40b
+ kgsl_worker_thr-333   [001] ....  1456.029319: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.029347: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+##### CPU 2 buffer started ####
+ kgsl_worker_thr-333   [002] ....  1456.045740: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x412
+ kgsl_worker_thr-333   [002] ....  1456.045971: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x412
+ kgsl_worker_thr-333   [002] ....  1456.045974: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x413
+ kgsl_worker_thr-333   [002] ....  1456.046097: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x413
+ kgsl_worker_thr-333   [002] ....  1456.046198: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.046468: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.046470: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x414
+ kgsl_worker_thr-333   [002] ....  1456.046586: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x414
+ kgsl_worker_thr-333   [002] ....  1456.046746: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.046774: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.047183: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+ kgsl_worker_thr-333   [001] ....  1456.078236: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x41f
+ kgsl_worker_thr-333   [001] ....  1456.078369: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x41f
+ kgsl_worker_thr-333   [001] ....  1456.078372: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x420
+ kgsl_worker_thr-333   [001] ....  1456.078504: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x420
+ kgsl_worker_thr-333   [001] ....  1456.078509: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x421
+ kgsl_worker_thr-333   [001] ....  1456.078638: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x421
+ kgsl_worker_thr-333   [001] ....  1456.078642: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x422
+ kgsl_worker_thr-333   [001] ....  1456.078772: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x422
+ kgsl_worker_thr-333   [001] ....  1456.078775: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x423
+ kgsl_worker_thr-333   [001] ....  1456.078904: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x423
+ kgsl_worker_thr-333   [001] ....  1456.078910: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x424
+ kgsl_worker_thr-333   [001] ....  1456.079161: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x424
+ kgsl_worker_thr-333   [001] ....  1456.079166: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x425
+ kgsl_worker_thr-333   [001] ....  1456.079295: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x425
+ kgsl_worker_thr-333   [001] ....  1456.079562: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.079732: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.079735: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x426
+ kgsl_worker_thr-333   [001] ....  1456.079865: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x426
+ kgsl_worker_thr-333   [001] ....  1456.080100: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.080153: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+ kgsl_worker_thr-333   [001] ....  1456.097244: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x428
+ kgsl_worker_thr-333   [001] ....  1456.097381: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x428
+ kgsl_worker_thr-333   [001] ....  1456.097384: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x429
+ kgsl_worker_thr-333   [001] ....  1456.097518: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x429
+ kgsl_worker_thr-333   [001] ....  1456.097522: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x42a
+ kgsl_worker_thr-333   [001] ....  1456.098666: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.098670: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x42f
+ kgsl_worker_thr-333   [001] ....  1456.098805: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x42f
+ kgsl_worker_thr-333   [001] ....  1456.098997: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.099020: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.099452: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [001] ....  1456.108661: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+##### CPU 3 buffer started ####
+  kworker/u16:10-382   [003] ....  1456.120911: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x431
+  kworker/u16:10-382   [003] ....  1456.121375: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.127961: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x432
+ kgsl_worker_thr-333   [003] ....  1456.128085: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x432
+ kgsl_worker_thr-333   [003] ....  1456.128087: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x433
+ kgsl_worker_thr-333   [003] ....  1456.128204: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x433
+ kgsl_worker_thr-333   [003] ....  1456.128207: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x434
+ kgsl_worker_thr-333   [002] ....  1456.128314: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x434
+ kgsl_worker_thr-333   [002] ....  1456.128316: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x435
+ kgsl_worker_thr-333   [003] ....  1456.128441: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x435
+ kgsl_worker_thr-333   [003] ....  1456.128443: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x436
+ kgsl_worker_thr-333   [003] ....  1456.128560: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x436
+ kgsl_worker_thr-333   [003] ....  1456.128563: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x437
+ kgsl_worker_thr-333   [003] ....  1456.128788: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x437
+ kgsl_worker_thr-333   [003] ....  1456.128791: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x438
+ kgsl_worker_thr-333   [003] ....  1456.128905: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x438
+ kgsl_worker_thr-333   [003] ....  1456.128968: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.129154: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.129157: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x439
+ kgsl_worker_thr-333   [003] ....  1456.129281: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x439
+ kgsl_worker_thr-333   [003] ....  1456.129422: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.129448: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:10-382   [003] ....  1456.129855: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:10-382   [001] ....  1456.140281: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:10-382   [001] ....  1456.140290: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:10-382   [001] ....  1456.140891: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x43a
+  kworker/u16:10-382   [001] ....  1456.141017: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x43a
+  kworker/u16:10-382   [001] ....  1456.141498: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [003] ....  1456.145291: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x43b
+ kgsl_worker_thr-333   [003] ....  1456.145410: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x43b
+ kgsl_worker_thr-333   [003] ....  1456.145412: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x43c
+ kgsl_worker_thr-333   [003] ....  1456.145529: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x43c
+ kgsl_worker_thr-333   [003] ....  1456.145531: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x43d
+ kgsl_worker_thr-333   [003] ....  1456.145658: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x43d
+ kgsl_worker_thr-333   [003] ....  1456.145659: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x43e
+ kgsl_worker_thr-333   [003] ....  1456.145776: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x43e
+ kgsl_worker_thr-333   [003] ....  1456.145778: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x43f
+ kgsl_worker_thr-333   [002] ....  1456.145899: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x43f
+ kgsl_worker_thr-333   [002] ....  1456.145904: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x440
+ kgsl_worker_thr-333   [002] ....  1456.146132: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x440
+ kgsl_worker_thr-333   [002] ....  1456.146135: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x441
+ kgsl_worker_thr-333   [002] ....  1456.146250: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x441
+ kgsl_worker_thr-333   [003] ....  1456.146329: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.146580: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.146582: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x442
+ kgsl_worker_thr-333   [001] ....  1456.146705: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x442
+ kgsl_worker_thr-333   [001] ....  1456.146849: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.146879: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:10-382   [001] ....  1456.147254: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [001] ....  1456.159765: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:10-382   [002] ....  1456.172407: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:10-382   [002] ....  1456.172416: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:10-382   [003] ....  1456.173040: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x444
+  kworker/u16:10-382   [003] ....  1456.173164: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x444
+  kworker/u16:10-382   [003] ....  1456.173644: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.179319: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x445
+ kgsl_worker_thr-333   [001] ....  1456.179447: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x445
+ kgsl_worker_thr-333   [001] ....  1456.179449: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x446
+ kgsl_worker_thr-333   [001] ....  1456.179571: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x446
+ kgsl_worker_thr-333   [001] ....  1456.179574: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x447
+ kgsl_worker_thr-333   [001] ....  1456.179691: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x447
+ kgsl_worker_thr-333   [001] ....  1456.179692: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x448
+ kgsl_worker_thr-333   [001] ....  1456.179809: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x448
+ kgsl_worker_thr-333   [001] ....  1456.179810: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x449
+ kgsl_worker_thr-333   [001] ....  1456.179928: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x449
+ kgsl_worker_thr-333   [001] ....  1456.179933: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x44a
+ kgsl_worker_thr-333   [001] ....  1456.180189: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x44a
+ kgsl_worker_thr-333   [001] ....  1456.180193: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x44b
+ kgsl_worker_thr-333   [001] ....  1456.180313: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x44b
+ kgsl_worker_thr-333   [001] ....  1456.180437: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.180698: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.180701: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x44c
+ kgsl_worker_thr-333   [001] ....  1456.180819: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x44c
+ kgsl_worker_thr-333   [001] ....  1456.180973: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.180999: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.181380: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.192890: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x44d
+  kworker/u16:11-8666  [001] ....  1456.193023: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x44d
+ kgsl_worker_thr-333   [003] ....  1456.197044: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x44e
+ kgsl_worker_thr-333   [003] ....  1456.197175: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x44e
+ kgsl_worker_thr-333   [003] ....  1456.197178: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x44f
+ kgsl_worker_thr-333   [003] ....  1456.197304: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x44f
+ kgsl_worker_thr-333   [003] ....  1456.197308: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x450
+ kgsl_worker_thr-333   [003] ....  1456.197430: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x450
+ kgsl_worker_thr-333   [003] ....  1456.197433: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x451
+ kgsl_worker_thr-333   [003] ....  1456.197557: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x451
+ kgsl_worker_thr-333   [003] ....  1456.197559: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x452
+ kgsl_worker_thr-333   [003] ....  1456.197682: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x452
+ kgsl_worker_thr-333   [003] ....  1456.197687: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x453
+ kgsl_worker_thr-333   [003] ....  1456.197944: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x453
+ kgsl_worker_thr-333   [003] ....  1456.197949: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x454
+ kgsl_worker_thr-333   [003] ....  1456.198079: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x454
+ kgsl_worker_thr-333   [003] ....  1456.198184: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.198421: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.198425: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x455
+ kgsl_worker_thr-333   [003] ....  1456.198558: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x455
+ kgsl_worker_thr-333   [003] ....  1456.198759: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.198789: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:10-382   [003] ....  1456.199249: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.208489: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.208497: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [003] ....  1456.209059: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x456
+  kworker/u16:11-8666  [003] ....  1456.209191: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x456
+  kworker/u16:11-8666  [003] ....  1456.211017: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.213872: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x457
+ kgsl_worker_thr-333   [002] ....  1456.213999: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x457
+ kgsl_worker_thr-333   [002] ....  1456.214001: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x458
+ kgsl_worker_thr-333   [002] ....  1456.214124: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x458
+ kgsl_worker_thr-333   [002] ....  1456.214127: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x459
+ kgsl_worker_thr-333   [002] ....  1456.214248: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x459
+ kgsl_worker_thr-333   [002] ....  1456.214250: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x45a
+ kgsl_worker_thr-333   [002] ....  1456.214372: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x45a
+ kgsl_worker_thr-333   [002] ....  1456.214374: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x45b
+ kgsl_worker_thr-333   [002] ....  1456.214496: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x45b
+ kgsl_worker_thr-333   [002] ....  1456.214500: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x45c
+ kgsl_worker_thr-333   [002] ....  1456.214736: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x45c
+ kgsl_worker_thr-333   [002] ....  1456.214741: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x45d
+ kgsl_worker_thr-333   [002] ....  1456.214862: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x45d
+ kgsl_worker_thr-333   [002] ....  1456.214957: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.215226: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.215229: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x45e
+ kgsl_worker_thr-333   [002] ....  1456.215350: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x45e
+ kgsl_worker_thr-333   [002] ....  1456.215522: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.215555: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [003] ....  1456.215963: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.224232: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.224239: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [002] ....  1456.224929: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x45f
+  kworker/u16:11-8666  [002] ....  1456.225056: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x45f
+  kworker/u16:11-8666  [002] ....  1456.225882: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+   kworker/u16:9-8665  [003] ....  1456.232136: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [003] ....  1456.243963: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [002] ....  1456.244857: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.244919: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x468
+  kworker/u16:11-8666  [002] ....  1456.245086: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x468
+   kworker/u16:9-8665  [002] ....  1456.256315: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [002] ....  1456.256324: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [002] ....  1456.256860: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x469
+   kworker/u16:9-8665  [002] ....  1456.257048: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x469
+   kworker/u16:9-8665  [002] ....  1456.257590: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.263769: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x46a
+ kgsl_worker_thr-333   [001] ....  1456.263907: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x46a
+ kgsl_worker_thr-333   [001] ....  1456.263910: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x46b
+ kgsl_worker_thr-333   [001] ....  1456.264048: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x46b
+ kgsl_worker_thr-333   [001] ....  1456.264052: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x46c
+ kgsl_worker_thr-333   [001] ....  1456.264185: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x46c
+ kgsl_worker_thr-333   [001] ....  1456.264188: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x46d
+ kgsl_worker_thr-333   [001] ....  1456.264320: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x46d
+ kgsl_worker_thr-333   [001] ....  1456.264323: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x46e
+ kgsl_worker_thr-333   [001] ....  1456.264455: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x46e
+ kgsl_worker_thr-333   [001] ....  1456.264461: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x46f
+ kgsl_worker_thr-333   [002] ....  1456.264727: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x46f
+ kgsl_worker_thr-333   [002] ....  1456.264736: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x470
+ kgsl_worker_thr-333   [002] ....  1456.264867: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x470
+ kgsl_worker_thr-333   [002] ....  1456.265016: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.265395: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.265399: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x471
+ kgsl_worker_thr-333   [001] ....  1456.265536: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x471
+ kgsl_worker_thr-333   [001] ....  1456.265734: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.265776: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [002] ....  1456.266221: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.276292: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.276301: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.276855: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x472
+  kworker/u16:11-8666  [001] ....  1456.276995: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x472
+  kworker/u16:11-8666  [001] ....  1456.277517: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.280299: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x473
+ kgsl_worker_thr-333   [001] ....  1456.280435: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x473
+ kgsl_worker_thr-333   [001] ....  1456.280438: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x474
+ kgsl_worker_thr-333   [001] ....  1456.280572: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x474
+ kgsl_worker_thr-333   [001] ....  1456.280575: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x475
+ kgsl_worker_thr-333   [001] ....  1456.280707: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x475
+ kgsl_worker_thr-333   [001] ....  1456.280709: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x476
+ kgsl_worker_thr-333   [001] ....  1456.280840: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x476
+ kgsl_worker_thr-333   [001] ....  1456.280843: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x477
+ kgsl_worker_thr-333   [001] ....  1456.280974: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x477
+ kgsl_worker_thr-333   [001] ....  1456.280979: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x478
+ kgsl_worker_thr-333   [001] ....  1456.281234: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x478
+ kgsl_worker_thr-333   [001] ....  1456.281239: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x479
+ kgsl_worker_thr-333   [001] ....  1456.281370: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x479
+ kgsl_worker_thr-333   [001] ....  1456.281614: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.281779: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.281782: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x47a
+ kgsl_worker_thr-333   [001] ....  1456.281915: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x47a
+ kgsl_worker_thr-333   [001] ....  1456.282093: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.282139: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [002] ....  1456.282838: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [001] ....  1456.292285: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [001] ....  1456.292294: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [001] ....  1456.292877: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x47b
+   kworker/u16:9-8665  [001] ....  1456.293018: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x47b
+   kworker/u16:9-8665  [001] .n..  1456.293583: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [003] ....  1456.297016: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x47c
+ kgsl_worker_thr-333   [003] ....  1456.297151: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x47c
+ kgsl_worker_thr-333   [003] ....  1456.297154: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x47d
+ kgsl_worker_thr-333   [003] ....  1456.297289: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x47d
+ kgsl_worker_thr-333   [003] ....  1456.297293: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x47e
+ kgsl_worker_thr-333   [003] ....  1456.297425: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x47e
+ kgsl_worker_thr-333   [003] ....  1456.297428: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x47f
+ kgsl_worker_thr-333   [003] ....  1456.297560: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x47f
+ kgsl_worker_thr-333   [003] ....  1456.297562: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x480
+ kgsl_worker_thr-333   [003] ....  1456.297694: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x480
+ kgsl_worker_thr-333   [003] ....  1456.297699: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x481
+ kgsl_worker_thr-333   [003] ....  1456.297961: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x481
+ kgsl_worker_thr-333   [003] ....  1456.297966: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x482
+ kgsl_worker_thr-333   [003] ....  1456.298097: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x482
+ kgsl_worker_thr-333   [003] ....  1456.298214: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.298381: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.298384: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x483
+ kgsl_worker_thr-333   [003] ....  1456.298517: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x483
+ kgsl_worker_thr-333   [003] ....  1456.298699: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.298736: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [001] ....  1456.299157: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.308403: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.308414: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.309296: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x484
+  kworker/u16:11-8666  [001] ....  1456.309438: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x484
+  kworker/u16:11-8666  [001] ....  1456.310173: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.314036: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x485
+ kgsl_worker_thr-333   [001] ....  1456.314158: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x485
+ kgsl_worker_thr-333   [001] ....  1456.314160: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x486
+ kgsl_worker_thr-333   [001] ....  1456.314278: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x486
+ kgsl_worker_thr-333   [001] ....  1456.314280: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x487
+ kgsl_worker_thr-333   [001] ....  1456.314397: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x487
+ kgsl_worker_thr-333   [001] ....  1456.314399: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x488
+ kgsl_worker_thr-333   [001] ....  1456.314516: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x488
+ kgsl_worker_thr-333   [001] ....  1456.314517: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x489
+ kgsl_worker_thr-333   [001] ....  1456.314634: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x489
+ kgsl_worker_thr-333   [001] ....  1456.314639: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x48a
+ kgsl_worker_thr-333   [001] ....  1456.314869: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x48a
+ kgsl_worker_thr-333   [001] ....  1456.314874: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x48b
+ kgsl_worker_thr-333   [001] ....  1456.314991: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x48b
+ kgsl_worker_thr-333   [001] ....  1456.315095: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.315366: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.315370: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x48c
+ kgsl_worker_thr-333   [002] ....  1456.315500: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x48c
+ kgsl_worker_thr-333   [002] ....  1456.315668: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.315700: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.316131: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [003] ....  1456.327921: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [001] ....  1456.328429: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [001] ....  1456.328471: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x48d
+   kworker/u16:9-8665  [002] ....  1456.328601: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x48d
+   kworker/u16:9-8665  [002] ....  1456.340604: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [002] ....  1456.340611: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [002] ....  1456.341972: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x48e
+   kworker/u16:9-8665  [002] ....  1456.342118: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x48e
+   kworker/u16:9-8665  [002] ....  1456.342700: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.348103: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x48f
+ kgsl_worker_thr-333   [001] ....  1456.348244: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x48f
+ kgsl_worker_thr-333   [001] ....  1456.348247: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x490
+ kgsl_worker_thr-333   [001] ....  1456.348385: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x490
+ kgsl_worker_thr-333   [001] ....  1456.348390: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x491
+ kgsl_worker_thr-333   [001] ....  1456.348525: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x491
+ kgsl_worker_thr-333   [001] ....  1456.348528: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x492
+ kgsl_worker_thr-333   [001] ....  1456.348661: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x492
+ kgsl_worker_thr-333   [001] ....  1456.348664: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x493
+ kgsl_worker_thr-333   [001] ....  1456.348797: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x493
+ kgsl_worker_thr-333   [001] ....  1456.348803: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x494
+ kgsl_worker_thr-333   [001] ....  1456.349061: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x494
+ kgsl_worker_thr-333   [001] ....  1456.349067: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x495
+ kgsl_worker_thr-333   [001] ....  1456.349198: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x495
+ kgsl_worker_thr-333   [001] ....  1456.349726: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.350017: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.350021: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x496
+ kgsl_worker_thr-333   [001] ....  1456.350152: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x496
+ kgsl_worker_thr-333   [001] ....  1456.350338: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.350376: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.350832: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.360240: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.360248: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.360796: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x497
+  kworker/u16:11-8666  [001] ....  1456.360936: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x497
+  kworker/u16:11-8666  [001] ....  1456.361505: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+   kworker/u16:9-8665  [002] ....  1456.367108: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [002] ....  1456.376231: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [002] ....  1456.376236: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [002] ....  1456.376888: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4a0
+   kworker/u16:9-8665  [002] ....  1456.377023: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4a0
+   kworker/u16:9-8665  [002] ....  1456.377541: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+##### CPU 0 buffer started ####
+ kgsl_worker_thr-333   [000] ....  1456.383113: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.383589: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.392231: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.392238: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.392814: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4a9
+  kworker/u16:11-8666  [001] ....  1456.392963: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4a9
+  kworker/u16:11-8666  [001] ....  1456.393552: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.398284: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4aa
+ kgsl_worker_thr-333   [000] ....  1456.398421: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4aa
+ kgsl_worker_thr-333   [000] ....  1456.398424: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4ab
+ kgsl_worker_thr-333   [000] ....  1456.398558: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4ab
+ kgsl_worker_thr-333   [000] ....  1456.398563: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4ac
+ kgsl_worker_thr-333   [000] ....  1456.398694: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4ac
+ kgsl_worker_thr-333   [000] ....  1456.398698: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4ad
+ kgsl_worker_thr-333   [000] ....  1456.398830: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4ad
+ kgsl_worker_thr-333   [000] ....  1456.398833: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4ae
+ kgsl_worker_thr-333   [000] ....  1456.398965: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4ae
+ kgsl_worker_thr-333   [000] ....  1456.398972: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4af
+ kgsl_worker_thr-333   [000] ....  1456.399227: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4af
+ kgsl_worker_thr-333   [000] ....  1456.399234: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4b0
+ kgsl_worker_thr-333   [000] ....  1456.399366: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4b0
+ kgsl_worker_thr-333   [000] ....  1456.399499: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.399798: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.399801: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4b1
+ kgsl_worker_thr-333   [000] ....  1456.400034: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4b1
+ kgsl_worker_thr-333   [000] ....  1456.400299: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.400340: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [002] ....  1456.400822: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.412294: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.412303: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.412982: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4b2
+  kworker/u16:11-8666  [001] ....  1456.413464: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4b2
+  kworker/u16:11-8666  [001] ....  1456.414068: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.416938: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4b3
+ kgsl_worker_thr-333   [000] ....  1456.417245: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4b3
+ kgsl_worker_thr-333   [000] ....  1456.417269: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4b4
+ kgsl_worker_thr-333   [000] ....  1456.417415: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4b4
+ kgsl_worker_thr-333   [000] ....  1456.417419: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4b5
+ kgsl_worker_thr-333   [000] ....  1456.417551: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4b5
+ kgsl_worker_thr-333   [000] ....  1456.417554: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4b6
+ kgsl_worker_thr-333   [000] ....  1456.417686: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4b6
+ kgsl_worker_thr-333   [000] ....  1456.417689: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4b7
+ kgsl_worker_thr-333   [000] ....  1456.417821: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4b7
+ kgsl_worker_thr-333   [000] ....  1456.417826: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4b8
+ kgsl_worker_thr-333   [000] ....  1456.418082: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4b8
+ kgsl_worker_thr-333   [000] ....  1456.418087: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4b9
+ kgsl_worker_thr-333   [000] ....  1456.418218: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4b9
+ kgsl_worker_thr-333   [002] ....  1456.418532: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.418702: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.418705: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4ba
+ kgsl_worker_thr-333   [002] ....  1456.418839: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4ba
+ kgsl_worker_thr-333   [002] ....  1456.419032: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.419070: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.419510: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [003] ....  1456.428358: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [003] ....  1456.428365: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [003] ....  1456.428960: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4bb
+   kworker/u16:9-8665  [003] ....  1456.429104: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4bb
+   kworker/u16:9-8665  [003] ....  1456.429662: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.433281: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4bc
+ kgsl_worker_thr-333   [000] ....  1456.433414: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4bc
+ kgsl_worker_thr-333   [000] ....  1456.433417: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4bd
+ kgsl_worker_thr-333   [000] ....  1456.433549: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4bd
+ kgsl_worker_thr-333   [000] ....  1456.433553: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4be
+ kgsl_worker_thr-333   [000] ....  1456.433683: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4be
+ kgsl_worker_thr-333   [000] ....  1456.433685: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4bf
+ kgsl_worker_thr-333   [000] ....  1456.433814: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4bf
+ kgsl_worker_thr-333   [000] ....  1456.433818: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4c0
+ kgsl_worker_thr-333   [000] ....  1456.433947: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4c0
+ kgsl_worker_thr-333   [000] ....  1456.433952: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4c1
+ kgsl_worker_thr-333   [000] ....  1456.434201: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4c1
+ kgsl_worker_thr-333   [000] ....  1456.434206: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4c2
+ kgsl_worker_thr-333   [000] ....  1456.434335: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4c2
+ kgsl_worker_thr-333   [000] ....  1456.434594: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.434883: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.434886: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4c3
+ kgsl_worker_thr-333   [000] ....  1456.435017: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4c3
+ kgsl_worker_thr-333   [000] ....  1456.435209: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.435256: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.435754: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [003] ....  1456.444507: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [003] ....  1456.444513: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [003] ....  1456.445077: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4c4
+   kworker/u16:9-8665  [003] ....  1456.445222: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4c4
+   kworker/u16:9-8665  [003] ....  1456.445794: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.449200: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4c5
+ kgsl_worker_thr-333   [000] ....  1456.449336: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4c5
+ kgsl_worker_thr-333   [000] ....  1456.449339: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4c6
+ kgsl_worker_thr-333   [000] ....  1456.449474: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4c6
+ kgsl_worker_thr-333   [000] ....  1456.449478: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4c7
+ kgsl_worker_thr-333   [000] ....  1456.449611: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4c7
+ kgsl_worker_thr-333   [000] ....  1456.449615: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4c8
+ kgsl_worker_thr-333   [000] ....  1456.449747: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4c8
+ kgsl_worker_thr-333   [000] ....  1456.449750: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4c9
+ kgsl_worker_thr-333   [000] ....  1456.449882: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4c9
+ kgsl_worker_thr-333   [000] ....  1456.449888: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4ca
+ kgsl_worker_thr-333   [000] ....  1456.450143: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4ca
+ kgsl_worker_thr-333   [000] ....  1456.450148: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4cb
+ kgsl_worker_thr-333   [000] ....  1456.450280: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4cb
+ kgsl_worker_thr-333   [000] ....  1456.450565: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.450855: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.450858: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4cc
+ kgsl_worker_thr-333   [000] ....  1456.450991: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4cc
+ kgsl_worker_thr-333   [000] ....  1456.451175: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.451210: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.451652: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [003] ....  1456.460342: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [003] ....  1456.460348: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [003] ....  1456.460980: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4cd
+   kworker/u16:9-8665  [003] ....  1456.461116: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4cd
+   kworker/u16:9-8665  [003] ....  1456.461614: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.465486: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4ce
+ kgsl_worker_thr-333   [000] ....  1456.465620: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4ce
+ kgsl_worker_thr-333   [000] ....  1456.465623: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4cf
+ kgsl_worker_thr-333   [000] ....  1456.465757: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4cf
+ kgsl_worker_thr-333   [000] ....  1456.465761: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4d0
+ kgsl_worker_thr-333   [000] ....  1456.465894: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4d0
+ kgsl_worker_thr-333   [000] ....  1456.465897: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4d1
+ kgsl_worker_thr-333   [000] ....  1456.466029: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4d1
+ kgsl_worker_thr-333   [000] ....  1456.466032: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4d2
+ kgsl_worker_thr-333   [000] ....  1456.466163: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4d2
+ kgsl_worker_thr-333   [000] ....  1456.466168: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4d3
+ kgsl_worker_thr-333   [000] ....  1456.466424: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4d3
+ kgsl_worker_thr-333   [000] ....  1456.466428: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4d4
+ kgsl_worker_thr-333   [000] ....  1456.466560: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4d4
+ kgsl_worker_thr-333   [000] ....  1456.466686: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.466975: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.466978: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4d5
+ kgsl_worker_thr-333   [000] ....  1456.467112: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4d5
+ kgsl_worker_thr-333   [000] ....  1456.467308: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.467342: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.467780: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [003] ....  1456.476266: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [003] ....  1456.476272: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [003] ....  1456.476952: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4d6
+   kworker/u16:9-8665  [003] ....  1456.477090: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4d6
+   kworker/u16:9-8665  [003] ....  1456.477616: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.482430: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4d7
+ kgsl_worker_thr-333   [000] ....  1456.482565: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4d7
+ kgsl_worker_thr-333   [000] ....  1456.482568: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4d8
+ kgsl_worker_thr-333   [000] ....  1456.482703: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4d8
+ kgsl_worker_thr-333   [000] ....  1456.482707: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4d9
+ kgsl_worker_thr-333   [000] ....  1456.482840: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4d9
+ kgsl_worker_thr-333   [000] ....  1456.482843: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4da
+ kgsl_worker_thr-333   [000] ....  1456.482974: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4da
+ kgsl_worker_thr-333   [000] ....  1456.482977: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4db
+ kgsl_worker_thr-333   [000] ....  1456.483110: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4db
+ kgsl_worker_thr-333   [000] ....  1456.483116: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4dc
+ kgsl_worker_thr-333   [000] ....  1456.483372: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4dc
+ kgsl_worker_thr-333   [000] ....  1456.483377: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4dd
+ kgsl_worker_thr-333   [000] ....  1456.483510: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4dd
+ kgsl_worker_thr-333   [000] ....  1456.483832: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.484131: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.484137: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4de
+ kgsl_worker_thr-333   [002] ....  1456.484272: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4de
+ kgsl_worker_thr-333   [002] ....  1456.484466: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.484504: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.484945: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.496222: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.496228: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.496795: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4df
+  kworker/u16:11-8666  [001] ....  1456.497610: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4df
+  kworker/u16:11-8666  [001] ....  1456.498191: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.501006: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4e0
+ kgsl_worker_thr-333   [003] ....  1456.501156: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4e0
+ kgsl_worker_thr-333   [003] ....  1456.501161: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4e1
+ kgsl_worker_thr-333   [003] ....  1456.501299: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4e1
+ kgsl_worker_thr-333   [003] ....  1456.501303: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4e2
+ kgsl_worker_thr-333   [003] ....  1456.501441: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4e2
+ kgsl_worker_thr-333   [003] ....  1456.501445: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4e3
+ kgsl_worker_thr-333   [003] ....  1456.501579: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4e3
+ kgsl_worker_thr-333   [003] ....  1456.501582: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4e4
+ kgsl_worker_thr-333   [003] ....  1456.501715: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4e4
+ kgsl_worker_thr-333   [003] ....  1456.501721: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4e5
+ kgsl_worker_thr-333   [003] ....  1456.501979: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4e5
+ kgsl_worker_thr-333   [003] ....  1456.501984: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4e6
+ kgsl_worker_thr-333   [003] ....  1456.502116: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4e6
+ kgsl_worker_thr-333   [003] ....  1456.502229: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.502520: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.502523: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4e7
+ kgsl_worker_thr-333   [003] ....  1456.502656: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4e7
+ kgsl_worker_thr-333   [003] ....  1456.502846: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.502884: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [003] ....  1456.503314: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [003] ....  1456.512236: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [003] ....  1456.512242: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [003] ....  1456.512869: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4e8
+   kworker/u16:9-8665  [003] ....  1456.513012: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4e8
+   kworker/u16:9-8665  [003] ....  1456.513582: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.517201: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4e9
+ kgsl_worker_thr-333   [001] ....  1456.517338: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4e9
+ kgsl_worker_thr-333   [001] ....  1456.517341: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4ea
+ kgsl_worker_thr-333   [001] ....  1456.517477: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4ea
+ kgsl_worker_thr-333   [001] ....  1456.517482: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4eb
+ kgsl_worker_thr-333   [002] ....  1456.517628: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4eb
+ kgsl_worker_thr-333   [002] ....  1456.517634: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4ec
+ kgsl_worker_thr-333   [002] ....  1456.517771: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4ec
+ kgsl_worker_thr-333   [002] ....  1456.517775: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4ed
+ kgsl_worker_thr-333   [002] ....  1456.517909: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4ed
+ kgsl_worker_thr-333   [002] ....  1456.517915: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4ee
+ kgsl_worker_thr-333   [002] ....  1456.518177: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4ee
+ kgsl_worker_thr-333   [002] ....  1456.518182: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4ef
+ kgsl_worker_thr-333   [002] ....  1456.518323: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4ef
+ kgsl_worker_thr-333   [002] ....  1456.518458: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.518755: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.518757: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4f0
+ kgsl_worker_thr-333   [002] ....  1456.518892: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4f0
+ kgsl_worker_thr-333   [002] ....  1456.519095: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.519132: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.519645: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.528216: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.528220: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.528882: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4f1
+  kworker/u16:11-8666  [001] ....  1456.529022: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4f1
+  kworker/u16:11-8666  [001] ....  1456.529564: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.532962: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4f2
+ kgsl_worker_thr-333   [000] ....  1456.533096: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4f2
+ kgsl_worker_thr-333   [000] ....  1456.533099: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4f3
+ kgsl_worker_thr-333   [000] ....  1456.533231: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4f3
+ kgsl_worker_thr-333   [000] ....  1456.533236: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4f4
+ kgsl_worker_thr-333   [000] ....  1456.533378: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4f4
+ kgsl_worker_thr-333   [000] ....  1456.533381: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4f5
+ kgsl_worker_thr-333   [000] ....  1456.533511: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4f5
+ kgsl_worker_thr-333   [000] ....  1456.533515: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4f6
+ kgsl_worker_thr-333   [000] ....  1456.533704: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4f6
+ kgsl_worker_thr-333   [000] ....  1456.533709: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4f7
+ kgsl_worker_thr-333   [000] ....  1456.533963: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4f7
+ kgsl_worker_thr-333   [000] ....  1456.533967: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x4f8
+ kgsl_worker_thr-333   [000] ....  1456.534097: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x4f8
+ kgsl_worker_thr-333   [000] ....  1456.534218: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.534500: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.534503: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x4f9
+ kgsl_worker_thr-333   [000] ....  1456.534632: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x4f9
+ kgsl_worker_thr-333   [000] ....  1456.534821: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.534852: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [000] ....  1456.535325: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [000] ....  1456.544276: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [000] ....  1456.544281: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [000] ....  1456.544928: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x4fa
+   kworker/u16:9-8665  [000] ....  1456.545066: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x4fa
+   kworker/u16:9-8665  [000] ....  1456.545576: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.549837: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x4fb
+ kgsl_worker_thr-333   [002] ....  1456.549988: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x4fb
+ kgsl_worker_thr-333   [002] ....  1456.549991: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x4fc
+ kgsl_worker_thr-333   [002] ....  1456.550128: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x4fc
+ kgsl_worker_thr-333   [002] ....  1456.550131: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x4fd
+ kgsl_worker_thr-333   [002] ....  1456.550263: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x4fd
+ kgsl_worker_thr-333   [002] ....  1456.550267: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x4fe
+ kgsl_worker_thr-333   [002] ....  1456.550399: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x4fe
+ kgsl_worker_thr-333   [002] ....  1456.550402: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x4ff
+ kgsl_worker_thr-333   [002] ....  1456.550533: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x4ff
+ kgsl_worker_thr-333   [002] ....  1456.550559: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x500
+ kgsl_worker_thr-333   [002] ....  1456.550819: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x500
+ kgsl_worker_thr-333   [002] ....  1456.550824: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x501
+ kgsl_worker_thr-333   [002] ....  1456.550957: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x501
+ kgsl_worker_thr-333   [002] ....  1456.551085: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.551379: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.551383: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x502
+ kgsl_worker_thr-333   [002] ....  1456.551519: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x502
+ kgsl_worker_thr-333   [002] ....  1456.551730: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.551766: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [000] ....  1456.552250: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [003] ....  1456.563629: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.564269: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.564338: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x503
+  kworker/u16:11-8666  [001] ....  1456.564483: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x503
+   kworker/u16:9-8665  [002] ....  1456.576355: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [002] ....  1456.576364: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [002] ....  1456.577008: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x504
+   kworker/u16:9-8665  [002] ....  1456.577151: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x504
+   kworker/u16:9-8665  [002] ....  1456.577714: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.583962: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x505
+ kgsl_worker_thr-333   [002] ....  1456.584039: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x505
+ kgsl_worker_thr-333   [002] ....  1456.584041: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x506
+ kgsl_worker_thr-333   [001] ....  1456.584197: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x506
+ kgsl_worker_thr-333   [001] ....  1456.584203: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x507
+ kgsl_worker_thr-333   [001] ....  1456.584326: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x507
+ kgsl_worker_thr-333   [001] ....  1456.584328: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x508
+ kgsl_worker_thr-333   [001] ....  1456.584448: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x508
+ kgsl_worker_thr-333   [001] ....  1456.584451: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x509
+ kgsl_worker_thr-333   [001] ....  1456.584575: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x509
+ kgsl_worker_thr-333   [001] ....  1456.584579: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x50a
+ kgsl_worker_thr-333   [001] ....  1456.584810: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x50a
+ kgsl_worker_thr-333   [001] ....  1456.584813: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x50b
+ kgsl_worker_thr-333   [001] ....  1456.584935: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x50b
+ kgsl_worker_thr-333   [001] ....  1456.585017: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.585282: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.585284: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x50c
+ kgsl_worker_thr-333   [001] ....  1456.585404: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x50c
+ kgsl_worker_thr-333   [001] ....  1456.585612: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.585641: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.586162: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [003] ....  1456.596223: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [003] ....  1456.596232: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [002] ....  1456.597270: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x50d
+  kworker/u16:11-8666  [002] ....  1456.597430: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x50d
+  kworker/u16:11-8666  [002] ....  1456.597916: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.600624: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x50e
+ kgsl_worker_thr-333   [002] ....  1456.600744: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x50e
+ kgsl_worker_thr-333   [002] ....  1456.600746: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x50f
+ kgsl_worker_thr-333   [002] ....  1456.600864: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x50f
+ kgsl_worker_thr-333   [002] ....  1456.600867: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x510
+ kgsl_worker_thr-333   [002] ....  1456.600984: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x510
+ kgsl_worker_thr-333   [002] ....  1456.600986: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x511
+ kgsl_worker_thr-333   [002] ....  1456.601103: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x511
+ kgsl_worker_thr-333   [002] ....  1456.601105: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x512
+ kgsl_worker_thr-333   [002] ....  1456.601221: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x512
+ kgsl_worker_thr-333   [002] ....  1456.601225: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x513
+ kgsl_worker_thr-333   [002] ....  1456.601453: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x513
+ kgsl_worker_thr-333   [002] ....  1456.601457: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x514
+ kgsl_worker_thr-333   [002] ....  1456.601574: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x514
+ kgsl_worker_thr-333   [002] ....  1456.601650: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.601902: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.601904: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x515
+ kgsl_worker_thr-333   [002] ....  1456.602021: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x515
+ kgsl_worker_thr-333   [002] ....  1456.602179: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.602205: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [002] ....  1456.602579: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.612233: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.612239: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.612940: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x516
+  kworker/u16:11-8666  [001] ....  1456.613080: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x516
+  kworker/u16:11-8666  [001] ....  1456.613641: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.618249: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x517
+ kgsl_worker_thr-333   [002] ....  1456.618384: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x517
+ kgsl_worker_thr-333   [002] ....  1456.618387: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x518
+ kgsl_worker_thr-333   [002] ....  1456.618521: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x518
+ kgsl_worker_thr-333   [002] ....  1456.618526: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x519
+ kgsl_worker_thr-333   [002] ....  1456.618658: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x519
+ kgsl_worker_thr-333   [002] ....  1456.618661: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x51a
+ kgsl_worker_thr-333   [002] ....  1456.618793: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x51a
+ kgsl_worker_thr-333   [002] ....  1456.618796: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x51b
+ kgsl_worker_thr-333   [002] ....  1456.618928: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x51b
+ kgsl_worker_thr-333   [002] ....  1456.618934: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x51c
+ kgsl_worker_thr-333   [002] ....  1456.619202: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x51c
+ kgsl_worker_thr-333   [002] ....  1456.619209: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x51d
+ kgsl_worker_thr-333   [002] ....  1456.619341: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x51d
+ kgsl_worker_thr-333   [002] ....  1456.619480: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.619679: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.619682: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x51e
+ kgsl_worker_thr-333   [002] ....  1456.619819: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x51e
+ kgsl_worker_thr-333   [002] ....  1456.620087: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.620142: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [000] ....  1456.620963: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [003] ....  1456.631992: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.632604: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.632677: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x51f
+  kworker/u16:11-8666  [001] ....  1456.632825: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x51f
+   kworker/u16:9-8665  [000] ....  1456.644352: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [000] ....  1456.644363: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [000] ....  1456.645088: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x520
+   kworker/u16:9-8665  [000] ....  1456.645228: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x520
+   kworker/u16:9-8665  [000] ....  1456.645851: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.651994: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x521
+ kgsl_worker_thr-333   [002] ....  1456.652134: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x521
+ kgsl_worker_thr-333   [002] ....  1456.652138: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x522
+ kgsl_worker_thr-333   [002] ....  1456.652263: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x522
+ kgsl_worker_thr-333   [002] ....  1456.652266: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x523
+ kgsl_worker_thr-333   [002] ....  1456.652385: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x523
+ kgsl_worker_thr-333   [002] ....  1456.652388: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x524
+ kgsl_worker_thr-333   [002] ....  1456.652507: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x524
+ kgsl_worker_thr-333   [002] ....  1456.652510: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x525
+ kgsl_worker_thr-333   [002] ....  1456.652629: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x525
+ kgsl_worker_thr-333   [002] ....  1456.652634: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x526
+ kgsl_worker_thr-333   [002] ....  1456.652863: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x526
+ kgsl_worker_thr-333   [002] ....  1456.652866: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x527
+ kgsl_worker_thr-333   [002] ....  1456.652985: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x527
+ kgsl_worker_thr-333   [002] ....  1456.653072: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.653332: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.653334: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x528
+ kgsl_worker_thr-333   [002] ....  1456.653454: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x528
+ kgsl_worker_thr-333   [002] ....  1456.653727: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.653763: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.654213: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [001] ....  1456.664193: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [001] ....  1456.664199: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [001] ....  1456.664794: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x529
+  kworker/u16:11-8666  [001] ....  1456.664918: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x529
+  kworker/u16:11-8666  [001] ....  1456.665407: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.668467: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x52a
+ kgsl_worker_thr-333   [002] ....  1456.668592: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x52a
+ kgsl_worker_thr-333   [002] ....  1456.668594: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x52b
+ kgsl_worker_thr-333   [002] ....  1456.668714: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x52b
+ kgsl_worker_thr-333   [002] ....  1456.668717: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x52c
+ kgsl_worker_thr-333   [002] ....  1456.668835: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x52c
+ kgsl_worker_thr-333   [002] ....  1456.668837: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x52d
+ kgsl_worker_thr-333   [002] ....  1456.668954: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x52d
+ kgsl_worker_thr-333   [002] ....  1456.668956: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x52e
+ kgsl_worker_thr-333   [002] ....  1456.669073: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x52e
+ kgsl_worker_thr-333   [002] ....  1456.669077: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x52f
+ kgsl_worker_thr-333   [002] ....  1456.669304: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x52f
+ kgsl_worker_thr-333   [002] ....  1456.669309: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x530
+ kgsl_worker_thr-333   [002] ....  1456.669425: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x530
+ kgsl_worker_thr-333   [002] ....  1456.669509: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.669767: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.669769: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x531
+ kgsl_worker_thr-333   [002] ....  1456.669888: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x531
+ kgsl_worker_thr-333   [002] ....  1456.670045: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.670072: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [003] ....  1456.670460: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [003] ....  1456.680250: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [003] ....  1456.680257: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [003] ....  1456.680864: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x532
+   kworker/u16:9-8665  [003] ....  1456.681003: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x532
+   kworker/u16:9-8665  [003] ....  1456.681556: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.684975: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x533
+ kgsl_worker_thr-333   [000] ....  1456.685109: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x533
+ kgsl_worker_thr-333   [000] ....  1456.685113: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x534
+ kgsl_worker_thr-333   [000] ....  1456.685245: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x534
+ kgsl_worker_thr-333   [000] ....  1456.685251: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x535
+ kgsl_worker_thr-333   [000] ....  1456.685380: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x535
+ kgsl_worker_thr-333   [000] ....  1456.685383: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x536
+ kgsl_worker_thr-333   [000] ....  1456.685513: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x536
+ kgsl_worker_thr-333   [000] ....  1456.685517: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x537
+ kgsl_worker_thr-333   [000] ....  1456.685646: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x537
+ kgsl_worker_thr-333   [000] ....  1456.685651: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x538
+ kgsl_worker_thr-333   [000] ....  1456.685902: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x538
+ kgsl_worker_thr-333   [000] ....  1456.685907: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x539
+ kgsl_worker_thr-333   [000] ....  1456.686036: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x539
+ kgsl_worker_thr-333   [000] ....  1456.686493: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.686778: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.686781: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x53a
+ kgsl_worker_thr-333   [000] ....  1456.686911: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x53a
+ kgsl_worker_thr-333   [000] ....  1456.687106: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.687143: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [001] ....  1456.687575: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.696435: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.696442: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [002] ....  1456.697180: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x53b
+  kworker/u16:11-8666  [002] ....  1456.697331: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x53b
+  kworker/u16:11-8666  [002] ....  1456.697892: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.701980: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x53c
+ kgsl_worker_thr-333   [002] ....  1456.702119: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x53c
+ kgsl_worker_thr-333   [002] ....  1456.702123: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x53d
+ kgsl_worker_thr-333   [002] ....  1456.702264: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x53d
+ kgsl_worker_thr-333   [002] ....  1456.702268: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x53e
+ kgsl_worker_thr-333   [002] ....  1456.702401: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x53e
+ kgsl_worker_thr-333   [002] ....  1456.702404: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x53f
+ kgsl_worker_thr-333   [002] ....  1456.702541: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x53f
+ kgsl_worker_thr-333   [002] ....  1456.702544: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x540
+ kgsl_worker_thr-333   [002] ....  1456.702676: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x540
+ kgsl_worker_thr-333   [002] ....  1456.702682: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x541
+ kgsl_worker_thr-333   [002] ....  1456.702944: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x541
+ kgsl_worker_thr-333   [002] ....  1456.702950: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x542
+ kgsl_worker_thr-333   [002] ....  1456.703087: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x542
+ kgsl_worker_thr-333   [002] ....  1456.703216: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.703647: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.703651: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x543
+ kgsl_worker_thr-333   [002] ....  1456.703785: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x543
+ kgsl_worker_thr-333   [002] ....  1456.703984: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.704049: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [000] ....  1456.704494: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [000] ....  1456.715234: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [002] ....  1456.715672: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [002] ....  1456.715701: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x544
+   kworker/u16:9-8665  [002] ....  1456.715822: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x544
+   kworker/u16:9-8665  [002] ....  1456.724266: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [002] ....  1456.724271: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [002] ....  1456.724784: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x545
+   kworker/u16:9-8665  [002] ....  1456.724907: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x545
+   kworker/u16:9-8665  [002] ....  1456.725447: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.735927: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x546
+ kgsl_worker_thr-333   [001] ....  1456.736085: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x546
+ kgsl_worker_thr-333   [001] ....  1456.736089: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x547
+ kgsl_worker_thr-333   [001] ....  1456.736226: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x547
+ kgsl_worker_thr-333   [001] ....  1456.736231: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x548
+ kgsl_worker_thr-333   [001] ....  1456.736364: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x548
+ kgsl_worker_thr-333   [001] ....  1456.736367: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x549
+ kgsl_worker_thr-333   [000] ....  1456.736516: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x549
+ kgsl_worker_thr-333   [000] ....  1456.736522: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x54a
+ kgsl_worker_thr-333   [000] ....  1456.736664: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x54a
+ kgsl_worker_thr-333   [000] ....  1456.736673: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x54b
+ kgsl_worker_thr-333   [000] ....  1456.736936: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x54b
+ kgsl_worker_thr-333   [000] ....  1456.736944: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x54c
+ kgsl_worker_thr-333   [000] ....  1456.737076: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x54c
+ kgsl_worker_thr-333   [000] ....  1456.737544: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [000] ....  1456.737858: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [000] ....  1456.737862: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x54d
+ kgsl_worker_thr-333   [000] ....  1456.737993: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x54d
+ kgsl_worker_thr-333   [000] ....  1456.738226: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [000] ....  1456.738279: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [001] ....  1456.738770: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.748326: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.748337: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [002] ....  1456.749130: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x54e
+  kworker/u16:11-8666  [002] ....  1456.749273: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x54e
+  kworker/u16:11-8666  [002] ....  1456.749849: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [003] ....  1456.752630: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x54f
+ kgsl_worker_thr-333   [003] ....  1456.752772: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x54f
+ kgsl_worker_thr-333   [003] ....  1456.752776: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x550
+ kgsl_worker_thr-333   [003] ....  1456.752911: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x550
+ kgsl_worker_thr-333   [003] ....  1456.752915: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x551
+ kgsl_worker_thr-333   [003] ....  1456.753048: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x551
+ kgsl_worker_thr-333   [003] ....  1456.753051: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x552
+ kgsl_worker_thr-333   [003] ....  1456.753186: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x552
+ kgsl_worker_thr-333   [003] ....  1456.753189: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x553
+ kgsl_worker_thr-333   [003] ....  1456.753333: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x553
+ kgsl_worker_thr-333   [003] ....  1456.753340: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x554
+ kgsl_worker_thr-333   [003] ....  1456.753619: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x554
+ kgsl_worker_thr-333   [003] ....  1456.753626: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x555
+ kgsl_worker_thr-333   [003] ....  1456.753789: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x555
+ kgsl_worker_thr-333   [003] ....  1456.754027: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.754238: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.754246: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x556
+ kgsl_worker_thr-333   [003] ....  1456.754396: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x556
+ kgsl_worker_thr-333   [003] ....  1456.754673: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.754737: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [002] ....  1456.755398: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.766305: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.766316: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [002] ....  1456.766948: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x557
+  kworker/u16:11-8666  [002] ....  1456.767182: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x557
+  kworker/u16:11-8666  [002] ....  1456.768122: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.771179: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x558
+ kgsl_worker_thr-333   [001] ....  1456.771345: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x558
+ kgsl_worker_thr-333   [001] ....  1456.771349: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x559
+ kgsl_worker_thr-333   [001] ....  1456.771493: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x559
+ kgsl_worker_thr-333   [001] ....  1456.771498: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x55a
+ kgsl_worker_thr-333   [001] ....  1456.771636: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x55a
+ kgsl_worker_thr-333   [001] ....  1456.771639: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x55b
+ kgsl_worker_thr-333   [001] ....  1456.771777: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x55b
+ kgsl_worker_thr-333   [001] ....  1456.771780: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x55c
+ kgsl_worker_thr-333   [001] ....  1456.771917: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x55c
+ kgsl_worker_thr-333   [001] ....  1456.771923: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x55d
+ kgsl_worker_thr-333   [003] ....  1456.772243: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x55d
+ kgsl_worker_thr-333   [003] ....  1456.772250: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x55e
+ kgsl_worker_thr-333   [003] ....  1456.772393: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x55e
+ kgsl_worker_thr-333   [003] ....  1456.772573: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.772899: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.772904: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x55f
+ kgsl_worker_thr-333   [003] ....  1456.773057: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x55f
+ kgsl_worker_thr-333   [003] ....  1456.773328: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.773385: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [002] ....  1456.773982: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [000] ....  1456.783407: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [002] ....  1456.783969: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.784055: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x560
+  kworker/u16:11-8666  [002] ....  1456.784279: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x560
+  kworker/u16:11-8666  [002] ....  1456.792249: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.792259: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [002] ....  1456.793055: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x561
+  kworker/u16:11-8666  [002] ....  1456.793299: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x561
+  kworker/u16:11-8666  [002] ....  1456.793973: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [000] ....  1456.805571: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x562
+ kgsl_worker_thr-333   [000] ....  1456.805692: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x562
+ kgsl_worker_thr-333   [000] ....  1456.805694: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x563
+ kgsl_worker_thr-333   [000] ....  1456.805814: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x563
+ kgsl_worker_thr-333   [000] ....  1456.805817: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x564
+ kgsl_worker_thr-333   [000] ....  1456.805935: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x564
+ kgsl_worker_thr-333   [000] ....  1456.805937: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x565
+ kgsl_worker_thr-333   [000] ....  1456.806054: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x565
+ kgsl_worker_thr-333   [000] ....  1456.806056: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x566
+ kgsl_worker_thr-333   [000] ....  1456.806173: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x566
+ kgsl_worker_thr-333   [000] ....  1456.806177: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x567
+ kgsl_worker_thr-333   [000] ....  1456.806422: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x567
+ kgsl_worker_thr-333   [000] ....  1456.806425: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x568
+ kgsl_worker_thr-333   [000] ....  1456.806556: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x568
+ kgsl_worker_thr-333   [000] ....  1456.806683: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [003] ....  1456.806871: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [003] ....  1456.806878: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x569
+ kgsl_worker_thr-333   [003] ....  1456.807001: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x569
+ kgsl_worker_thr-333   [003] ....  1456.807149: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [003] ....  1456.807181: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [000] ....  1456.812210: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [002] ....  1456.816186: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [002] ....  1456.816191: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [002] ....  1456.816845: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x56a
+   kworker/u16:9-8665  [002] ....  1456.816969: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x56a
+   kworker/u16:9-8665  [002] ....  1456.817431: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.820221: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x56b
+ kgsl_worker_thr-333   [001] ....  1456.820352: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x56b
+ kgsl_worker_thr-333   [001] ....  1456.820355: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x56c
+ kgsl_worker_thr-333   [001] ....  1456.820475: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x56c
+ kgsl_worker_thr-333   [001] ....  1456.820477: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x56d
+ kgsl_worker_thr-333   [001] ....  1456.820596: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x56d
+ kgsl_worker_thr-333   [001] ....  1456.820598: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x56e
+ kgsl_worker_thr-333   [001] ....  1456.820714: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x56e
+ kgsl_worker_thr-333   [001] ....  1456.820716: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x56f
+ kgsl_worker_thr-333   [001] ....  1456.820833: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x56f
+ kgsl_worker_thr-333   [001] ....  1456.820836: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x570
+ kgsl_worker_thr-333   [001] ....  1456.821065: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x570
+ kgsl_worker_thr-333   [001] ....  1456.821069: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x571
+ kgsl_worker_thr-333   [001] ....  1456.821186: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x571
+ kgsl_worker_thr-333   [001] ....  1456.821257: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.821514: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.821515: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x572
+ kgsl_worker_thr-333   [001] ....  1456.821634: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x572
+ kgsl_worker_thr-333   [001] ....  1456.821794: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.821818: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [003] ....  1456.822222: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [000] ....  1456.832301: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [000] ....  1456.832311: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [000] ....  1456.835649: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x573
+   kworker/u16:9-8665  [000] ....  1456.835976: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x573
+   kworker/u16:9-8665  [001] ....  1456.837002: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.840446: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x574
+ kgsl_worker_thr-333   [002] ....  1456.840584: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x574
+ kgsl_worker_thr-333   [002] ....  1456.840587: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x575
+ kgsl_worker_thr-333   [002] ....  1456.840722: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x575
+ kgsl_worker_thr-333   [002] ....  1456.840727: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x576
+ kgsl_worker_thr-333   [002] ....  1456.840859: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x576
+ kgsl_worker_thr-333   [002] ....  1456.840863: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x577
+ kgsl_worker_thr-333   [002] ....  1456.840995: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x577
+ kgsl_worker_thr-333   [002] ....  1456.840998: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x578
+ kgsl_worker_thr-333   [002] ....  1456.841160: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x578
+ kgsl_worker_thr-333   [002] ....  1456.841166: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x579
+ kgsl_worker_thr-333   [002] ....  1456.841423: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x579
+ kgsl_worker_thr-333   [002] ....  1456.841428: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x57a
+ kgsl_worker_thr-333   [002] ....  1456.841560: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x57a
+ kgsl_worker_thr-333   [002] ....  1456.841682: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.841976: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.841979: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x57b
+ kgsl_worker_thr-333   [002] ....  1456.842112: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x57b
+ kgsl_worker_thr-333   [002] ....  1456.842320: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.842359: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [000] ....  1456.842819: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   BootAnimation-8756  [000] ....  1456.850447: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:11-8666  [002] ....  1456.850935: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+   kworker/u16:9-8665  [001] ....  1456.860236: kgsl_gmu_oob_set: mask=0x40000000
+   kworker/u16:9-8665  [001] ....  1456.860244: kgsl_gmu_oob_clear: mask=0x80000000
+   kworker/u16:9-8665  [001] ....  1456.860892: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x57c
+   kworker/u16:9-8665  [001] ....  1456.861028: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x57c
+   kworker/u16:9-8665  [001] ....  1456.861840: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [001] ....  1456.870374: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x57d
+ kgsl_worker_thr-333   [001] ....  1456.870509: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x57d
+ kgsl_worker_thr-333   [001] ....  1456.870513: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x57e
+ kgsl_worker_thr-333   [001] ....  1456.870648: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x57e
+ kgsl_worker_thr-333   [001] ....  1456.870652: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x57f
+ kgsl_worker_thr-333   [001] ....  1456.870786: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x57f
+ kgsl_worker_thr-333   [001] ....  1456.870789: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x580
+ kgsl_worker_thr-333   [001] ....  1456.870922: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x580
+ kgsl_worker_thr-333   [001] ....  1456.870925: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x581
+ kgsl_worker_thr-333   [001] ....  1456.871058: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x581
+ kgsl_worker_thr-333   [001] ....  1456.871063: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x582
+ kgsl_worker_thr-333   [001] ....  1456.871320: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x582
+ kgsl_worker_thr-333   [001] ....  1456.871325: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x583
+ kgsl_worker_thr-333   [001] ....  1456.871458: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x583
+ kgsl_worker_thr-333   [001] ....  1456.871770: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [001] ....  1456.872060: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [001] ....  1456.872063: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x584
+ kgsl_worker_thr-333   [001] ....  1456.872199: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x584
+ kgsl_worker_thr-333   [001] ....  1456.872388: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [001] ....  1456.872426: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+   kworker/u16:9-8665  [001] ....  1456.872926: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
+  kworker/u16:11-8666  [002] ....  1456.884484: kgsl_gmu_oob_set: mask=0x40000000
+  kworker/u16:11-8666  [002] ....  1456.884493: kgsl_gmu_oob_clear: mask=0x80000000
+  kworker/u16:11-8666  [003] ....  1456.885547: kgsl_hfi_send: id=0x21 size=0x3 seqnum=0x585
+  kworker/u16:11-8666  [003] ....  1456.885861: kgsl_hfi_receive: id=0x21 size=0x3 seqnum=0x585
+  kworker/u16:11-8666  [003] ....  1456.886669: kgsl_pwr_set_state: d_name=kgsl-3d0 state=SLUMBER
+ kgsl_worker_thr-333   [002] ....  1456.889943: kgsl_hfi_send: id=0x4 size=0x3b seqnum=0x586
+ kgsl_worker_thr-333   [002] ....  1456.890079: kgsl_hfi_receive: id=0x4 size=0x3b seqnum=0x586
+ kgsl_worker_thr-333   [002] ....  1456.890082: kgsl_hfi_send: id=0x3 size=0xa0 seqnum=0x587
+ kgsl_worker_thr-333   [002] ....  1456.890219: kgsl_hfi_receive: id=0x3 size=0xa0 seqnum=0x587
+ kgsl_worker_thr-333   [002] ....  1456.890223: kgsl_hfi_send: id=0xb size=0x4 seqnum=0x588
+ kgsl_worker_thr-333   [002] ....  1456.890357: kgsl_hfi_receive: id=0xb size=0x4 seqnum=0x588
+ kgsl_worker_thr-333   [002] ....  1456.890359: kgsl_hfi_send: id=0xd size=0x4 seqnum=0x589
+ kgsl_worker_thr-333   [002] ....  1456.890493: kgsl_hfi_receive: id=0xd size=0x4 seqnum=0x589
+ kgsl_worker_thr-333   [002] ....  1456.890497: kgsl_hfi_send: id=0xe size=0x2 seqnum=0x58a
+ kgsl_worker_thr-333   [002] ....  1456.890702: kgsl_hfi_receive: id=0xe size=0x2 seqnum=0x58a
+ kgsl_worker_thr-333   [002] ....  1456.890708: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x58b
+ kgsl_worker_thr-333   [002] ....  1456.890968: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x58b
+ kgsl_worker_thr-333   [002] ....  1456.890974: kgsl_hfi_send: id=0x1e size=0x4 seqnum=0x58c
+ kgsl_worker_thr-333   [002] ....  1456.891108: kgsl_hfi_receive: id=0x1e size=0x4 seqnum=0x58c
+ kgsl_worker_thr-333   [002] ....  1456.891227: kgsl_pwr_set_state: d_name=kgsl-3d0 state=AWARE
+ kgsl_worker_thr-333   [002] ....  1456.891518: kgsl_gmu_oob_set: mask=0x40000000
+ kgsl_worker_thr-333   [002] ....  1456.891521: kgsl_hfi_send: id=0xa size=0x1 seqnum=0x58d
+ kgsl_worker_thr-333   [002] ....  1456.891655: kgsl_hfi_receive: id=0xa size=0x1 seqnum=0x58d
+ kgsl_worker_thr-333   [002] ....  1456.891857: kgsl_gmu_oob_clear: mask=0x80000000
+ kgsl_worker_thr-333   [002] ....  1456.891890: kgsl_pwr_set_state: d_name=kgsl-3d0 state=ACTIVE
+  kworker/u16:10-382   [003] ....  1456.892387: kgsl_pwr_set_state: d_name=kgsl-3d0 state=NAP
