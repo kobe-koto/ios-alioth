@@ -738,6 +738,35 @@ cpufreq=1 bootcpu=7 cpus=8 adreno_soc=a650 adreno=1 adreno_watch=10
 - 另一条独立验证路径（§9.5 原列）：在 loader/UEFI 里用同一套寄存器顺序启动 CP，绕开 XNU 的异常/中断环境，
   判断复位是否 XNU 侧（SError/中断）引起。
 
+#### 第六轮：GMU 电源侧排查完，含 keepalive——全部证伪（2026-10-24）
+
+第五轮排除 a6xx_start 前置写后，逐一核对 GMU 电源管理侧的所有候选（都用真机源码或已有日志核对，不是猜）：
+
+| 机制 | 结论 | 依据 |
+|---|---|---|
+| GX 掉电 | 否 | step 17 日志：sptprac `0xc0`→`0`、3D 时钟实测 525 MHz、核能应答；step 20 全程 rbbm_status 0x1 |
+| IFPC 收走核 | 否 | `PWR_COL_INTER_FRAME_CTRL=0x9c40400` bit0(IFPC_enable)=**0**，与厂商基础值一致、`IFPC_ENABLE_MASK` 本驱动没加 |
+| `probe_gx_gmu=0 Hz` | 非异常 | 注释本就 "should be off"，预期值（差点误判，核对注释纠正） |
+| **GMU keepalive** | **否（本轮真机）** | step 20 写 `GMU_PWR_COL_KEEPALIVE=1`、**回读 0x1（确实写进了）**，CP 启动照样复位 |
+
+keepalive 的排除比 OOB/SPTPRAC 更有力：后两者「写不进/不被确认」无法判断，而 keepalive **确实生效**（回读 1），
+核保持供电请求已下达，仍复位。证据：`docs/evidence/2026-10-24-gpu-keepalive.log`。
+
+**GMU 电源侧全部排干净**。累计已排除：a6xx_start 前置写、IFPC、空闲掉电、OOB、SPTPRAC、keepalive、微码地址、
+zap 顺序、SMMU 翻译/取指、寄存器偏移、SCTLR、PTE 权限、`CP_RB_RPTR_ADDR`/bit27。GX 自始至终供电
+（rbbm_status 0x1、sptprac 0）。**结论收窄为：不是「核没电」，而是 CP 微码「开始取指/执行」这个动作本身触发
+GMU 之外的某物复位整机。**
+
+**剩下两条（都不是 GMU 电源，§9.5 原列）：**
+1. **hypervisor/XPU 对 CP 首次总线访问的拦截**——CP 带 APRIV（特权）去取微码/ring，可能撞上 TrustZone/hyp 的
+   访问控制。可查方向：zap shader 是否真正让 CP 脱离 secure（step 21 从未到达）；或 CP 取的微码/ring 内存的
+   XPU/stage-2 归属。
+2. **XNU 侧异常/中断**——CP 启动后可能立刻发中断或 SError，XNU 在这个裸环境下的处理导致复位。验证法（§9.5 原列）：
+   **在 loader/UEFI 里用同一套寄存器顺序启动 CP，绕开 XNU**。这条能一刀切开「硬件复位 vs XNU 复位」，但要改 loader，
+   工作量大。建议下一轮优先做这条——它是二选一的判定实验，信息量最大。
+
+工具：任何会复位的真机实验一律用 `tools/gpu-follow.sh`（层1）+ `adreno_pre_sqe_ms`（层2），已验证能稳定抓到复位前状态。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
