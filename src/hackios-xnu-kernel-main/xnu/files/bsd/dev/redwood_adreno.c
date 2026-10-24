@@ -118,6 +118,10 @@
  *                      processor, the vendor's "keep the core powered whatever it does" (adreno.c);
  *                      =0 leaves it out. The leading guess for the reset: the GMU takes the SoC down
  *                      when the started CP raises the core's activity and it was not told to hold
+ *   adreno_mask_irq=N  step 20 masks this core's interrupts across the CP_SQE_CNTL write: 1 IRQ+FIQ,
+ *                      2 also SError. If the reset stops with everything masked it is not an
+ *                      exception this core takes; DAIF is restored after, so a deferred SError fires
+ *                      then rather than being lost
  *   adreno_return=1    when all is over, go back to the loader instead of starting the system
  *   display_probe=1    before any step: read what the firmware left the display controller
  *                      doing (display_probe() below; two clocks are turned on, nothing else written)
@@ -3383,7 +3387,43 @@ step_core_start(void)
 	sleep_ms(pre_sqe_ms);
 	printf("adreno: %u: about to write %u to cp_sqe_cntl\n", step, sqe);
 	loader_log_flush();
+	/*
+	 * adreno_mask_irq=N: mask interrupts on this core across the fatal write, to tell whether the
+	 * reset is this core taking an exception the moment the command processor starts. 1: IRQ+FIQ;
+	 * 2: also SError/async abort (DAIF bit A). A masked SError is deferred, not lost -- so if the
+	 * machine lives through a masked write, the DAIF is restored afterwards and, if an SError was
+	 * pending, it is taken then (and named in the next-run log, or at least separated from a PMIC
+	 * reset). If the reset still happens with everything masked, it is not an exception this core
+	 * takes: it is the hardware/hypervisor resetting the SoC. Default 0: the write is made exactly
+	 * as before.
+	 */
+	uint32_t mask_irq = 0;
+	uint64_t saved_daif = 0;
+	PE_parse_boot_argn("adreno_mask_irq", &mask_irq, sizeof(mask_irq));
+	if (mask_irq) {
+		saved_daif = __builtin_arm_rsr64("DAIF");
+		/* DAIFSet bits: F=1<<0, I=1<<1, A(SError)=1<<2. The builtin needs a constant, so branch. */
+		if (mask_irq >= 2) {
+			__builtin_arm_wsr("DAIFSet", 1u << 2 | 1u << 1 | 1u << 0);
+		} else {
+			__builtin_arm_wsr("DAIFSet", 1u << 1 | 1u << 0);
+		}
+		printf("adreno: %u: interrupts masked for the write (adreno_mask_irq=%u): DAIF was %#llx, now %#llx\n",
+		    step, mask_irq, saved_daif, (uint64_t)__builtin_arm_rsr64("DAIF"));
+		loader_log_flush();
+	}
 	put(&gpu, "cp_sqe_cntl", CP_SQE_CNTL, sqe);
+	if (mask_irq) {
+		/* survived the write with interrupts masked: say so, then unmask and let any deferred one fire */
+		printf("adreno: %u: survived the write with interrupts masked; restoring DAIF %#llx now -- a deferred "
+		    "SError, if any, is taken here\n", step, saved_daif);
+		loader_log_flush();
+		sleep_ms(20);
+		__builtin_arm_wsr64("DAIF", saved_daif);
+		sleep_ms(20);
+		printf("adreno: %u: DAIF restored and still here\n", step);
+		loader_log_flush();
+	}
 	/*
 	 * One access at a time, each announced before it is made: the run stops at the start of the
 	 * command processor, and the loader stops writing this log down at second 24 (NOTE_SECONDS),
