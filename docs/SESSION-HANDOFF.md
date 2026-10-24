@@ -1018,6 +1018,41 @@ APRIV 正确的 RB_CNTL/RPTR_ADDR + 完整 a6xx_start。这是第一次让本驱
 
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
+#### 第十五/十六轮：GMU 侧比对补齐 busy counter，仍复位——金标准可见配置全部对齐（2026-10-24，真机）
+
+GMU 侧逐条比对金标准（37 个 GMU 寄存器）后，找到本驱动从没写、而厂商 `a6xx_start` 注释标明 **"applicable to
+all a6xx"** 的三条（就在 `a6xx_protect_init` 之前）——GMU **GPU-busy 电源计数器**：
+`CX_BUSY_MASK(0x23b0e)=0xff000000`、`POWER_COUNTER_SELECT_0(0x1f841)` 低字节 `0x20`、`POWER_COUNTER_ENABLE(0x1f840)=1`。
+`adreno_busycnt=1`（随 fullstart 默认开）补齐。真机：三条都在 SQE_CNTL 前写了（顺序正确），**仍整机复位**，停在
+STATE COMPLETE。证据：`docs/evidence/2026-10-24-gpu-busycnt.log`。**busy counter 也不是主因。**
+
+一个新读数：step 6 `gmu ao_gpu_cx_busy_status = 0x30000000`（bit28/29）。busy counter 三条未回读验证，不确定 GMU
+侧是否真写进（但不改变结论）。
+
+**金标准对照整体收尾**：至此 GPU 侧 + GMU 侧，金标准 trace 里**所有可见的 MMIO 写，本驱动已基本全覆盖**
+（bit27=0/rptr/aperture/HWCG/protect/bicubic/busy counter 全补齐、逐条对齐厂商值）。剩下金标准写而本驱动没写的，
+只有**环境性差异**：GPU→CPU 中断使能掩码（裸环境不需要、第八轮已证中断非因）、抢占/上下文切换寄存器（不用抢占）。
+**CP 启动照样 SoC 级复位。**
+
+**最终钉死的结论**：复位**不来自任何可见的 MMIO 寄存器配置**——配置已和厂商逐条对齐仍复位。只可能在 trace
+看不到的层面：①GMU 固件**内部状态/HFI 消息语义**（本驱动的 HFI 启动序列 step 13-17 与金标准的 HFI 消息流可能
+语义不同，但 HFI 是 GMU 固件消费的消息、不走 kgsl_regwrite，trace 看不到内容）；②ring/微码**内存的内容或 stage-2/
+XPU 属性**（CP 取指拿到的字节/权限）；③微码执行时碰到的某个硬件事实。这三者都**无法用"补一条 MMIO 寄存器"推进**。
+
+**这是 GPU 迄今最深、最干净的停点（16 轮）**：
+- 工具链完整可复用：构建链、`tools/gpu-follow.sh`（安全日志捕获）、`tools/gold-trace.sh`（金标准 trace）、
+  `tools/repack-loader.py`、`adreno_*` 全套实验开关（`fullstart/hwcg/protect/bicubic/busycnt/aperture/rptr/
+  mask_irq/cp_defer/pre_sqe_ms` + loader `oem gpustart`）。
+- 全程真机证据在 `docs/evidence/2026-10-24-gpu-*.log` 与金标准 `*-gold-*`。
+- 复位性质完全确定：SoC 级（PMIC）、CP 执行微码瞬间、非电源/非 CPU 异常/非 SMMU-hyp 访问/非可见 MMIO 配置。
+
+**若将来再推进，唯一有意义的方向是「trace 之外」**：
+1. **HFI 消息流比对**：开 Android 的 kgsl HFI/GMU trace（`kgsl_gmu_oob_*`、若有 `hfi` tracepoint）或在厂商内核
+   给 HFI 收发加打印重编，拿到金标准「GMU 固件在 CP 启动前收到的 HFI 消息序列」，与本驱动 step 13-17 的 HFI 比对。
+   这是最可能藏着差异的地方（GMU 固件托管电源，CP 启动依赖 GMU 固件处于正确内部状态）。
+2. **ring/微码内存属性**：确认 CP 取指的内存 stage-2/XPU 归属是否需要 `qcom_scm_assign_mem`（VMID 转移）。
+3. 精确解码 PMIC `reason1 0x2`（需读 loader 的 PMIC 读取实现）。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
