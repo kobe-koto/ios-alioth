@@ -697,6 +697,47 @@ cpufreq=1 bootcpu=7 cpus=8 adreno_soc=a650 adreno=1 adreno_watch=10
   （`0x0118/0x0119/0x011a`，GX 域）——厂商写它们时 GX 已由 OOB/SPTPRAC 托住，而本机这两条路走不通
   （§9.5 第二轮）。可用 `adreno_hwcg=0` 先排除，或只跳过这 3 个 GX 字再试。
 
+#### 第五轮：重活 ① 真机验证完成——**证伪**（2026-10-24）
+
+在本机（koto 的 Arch + 真机 K40）把工具链从零打通（THEOS/cctools AUR 包 + `xnu/apply.sh` + `xnu-deps/setup.sh` +
+`xnu-build.sh`），编出带 `adreno_fullstart` 的内核，两轮真机验证：
+
+| 运行 | cmdline | 结果 |
+|---|---|---|
+| HWCG-only | `adreno_fullstart=1 adreno_protect=0 adreno_bicubic=0` | HWCG 全 49 条 + 顶层 `0x8AA8AA82` **全写过**，含 3 个 GMU_GX 字；日志停在 `STATE COMPLETE`，仍在 `CP_SQE_CNTL` 复位 |
+| 完整 a6xx_start | `adreno_fullstart=1 adreno_protect=1 adreno_bicubic=1` | HWCG 50 + `CP_PROTECT_CNTL` + 34 条 protect 表 + 5 条 bicubic **全写过**；日志仍停在 `STATE COMPLETE`，仍在 `CP_SQE_CNTL` 复位 |
+
+**结论：补齐厂商 `a6xx_start()` 的全部前置写（HWCG / CP_PROTECT / bicubic）不改变结局——复位仍精确发生在
+`CP_SQE_CNTL=1` 这一条写。** 两轮写之前状态都一致：`rbbm_status 0x1`、`sptprac 0`、`hfi 0x1`、`gmu2host intr 0`。
+§9.5「待查项 #1」（最被寄予希望的一条）就此**真机证伪**：缺的不是这些前置寄存器写。
+证据：`docs/evidence/2026-10-24-gpu-fullstart-hwcg-only.log`、`…-protect-bicubic.log`。
+
+**本轮新增的可复用基础设施（关键，下次直接用）：**
+- **工具链在本机可用**：THEOS 装在 `/opt/theos`（AUR：`theos-git` + `theos-cctools-aarch64-git` + `theos-ios-sdks-git`，
+  iOS 16.5 SDK 齐），构建须 `export THEOS=/opt/theos`。构建树由 `xnu/apply.sh` 从 `xnu/files/` 生成到
+  `xnu-src/xnu-8796.121.2/`——**overlay 就是唯一源，不存在「两份都要改」**（handoff 旧说法在此仓库布局下不成立）。
+- **`tools/gpu-follow.sh`（层 1，安全日志捕获）**：替代 `xl run`。①绝不自动 `fastboot boot`/重试——手机必须已在 loader，
+  否则打印指令退出（根除 bootloop）；②每 ~150ms 拉一次 live log（`oem log`+`get_staged`），每快照存盘；③loader 一停答
+  立刻停、不重试、报告最后快照。这台机器**没有 UART 也没有 logdump 分区**，日志唯一出路就是 USB 实时拉取。
+- **`adreno_pre_sqe_ms`（层 2，内核改动）**：step 20 在写 `CP_SQE_CNTL` 之前打印 `STATE COMPLETE` 标记 + 显式
+  `loader_log_flush()` + 静默等 N ms（默认 800）。配合层 1 的 150ms 轮询，**保证主机拿到致命写之前的完整状态**。
+  `loader_log_putc` 每遇换行即 flush（cache write-back + dsb），这是能抓到的底层原因。
+- **构建踩坑**：仓库脚本 checkout 后丢了可执行位，需 `chmod +x xnu-build.sh xnu-deps/host/bin/* xnuloader/*.py xl tools/*.sh`；
+  `config` 阶段的 `check_all_exports`（`_pmap_cs_configuration`、IOService 符号集）报错是**既有的、无害的**，`-k` 跳过即可，内核照常链出。
+
+**本轮事故（务必记住）**：第一次用 `xl`（其 `enter` 会自动重试 `fastboot boot`）在崩溃内核上反复重启，
+把真机的 Evolution X 搞进 bootloop、system 逻辑分区被搞没（无数据损失，用户已重刷）。查证 loader 源码：它只按名字写
+`logdump` 分区（本机无此分区→一字不写），也没跑过 flash/erase——根因是 `xl` 自动重试。`gpu-follow.sh` 的「绝不自动 boot」
+就是针对这个。**任何会复位的真机实验，一律用 `gpu-follow.sh`，不要用 `xl run`。**
+
+**下一步（§9.5 剩余方向，#1 已排除）**：
+- 复位精确发生在「启动命令处理器」这一个动作，写 0（`adreno_sqe=0`）无害——高度指向 **CP 一取指/一跑微码就触发**
+  的东西：GX 域在那一刻是否真上电（本机 OOB 握手不被确认、SPTPRAC 写不进，§9.5 第二轮）、或 hypervisor/XPU 对
+  CP 的首次总线访问的拦截。建议下一轮读驱动 step 17（GMU 启动表是否请求了 IFPC）与 GMU 启动代码，判断能否让 GMU
+  在 CP 启动期间不收走 GX。
+- 另一条独立验证路径（§9.5 原列）：在 loader/UEFI 里用同一套寄存器顺序启动 CP，绕开 XNU 的异常/中断环境，
+  判断复位是否 XNU 侧（SError/中断）引起。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：

@@ -26,6 +26,7 @@
 #
 # Nothing here writes a partition: only `fastboot stage` (RAM), `oem run`, `oem log`, `get_staged`.
 set -u
+INVOCATION_DIR=$PWD                                         # where the user ran us (for --payload paths)
 cd "$(dirname "$(readlink -f "$0")")/.." || exit 1          # the kernel tree root (tools/ is under it)
 
 K=xnu-src/xnu-8796.121.2/BUILD/obj/DEVELOPMENT_ARM64_BCM2837/mach.development.bcm2837
@@ -44,7 +45,15 @@ XL_RAMDISK=${XL_RAMDISK:-$(readlink -f ../../boot/root.apfs 2>/dev/null || echo 
 
 PAYLOAD=
 case "${1:-}" in
-	--payload) PAYLOAD=$2 ;;
+	--payload)
+		[ -n "${2:-}" ] || { echo "gpu-follow: --payload needs a file"; exit 1; }
+		# resolve against the directory the user ran us from, not the kernel tree we cd'd into
+		case "$2" in
+			/*) PAYLOAD=$2 ;;
+			*)  PAYLOAD=$INVOCATION_DIR/$2 ;;
+		esac
+		[ -f "$PAYLOAD" ] || { echo "gpu-follow: payload not found: $2 (looked at $PAYLOAD)"; exit 1; }
+		;;
 	"") ;;
 	*) echo "usage: $0 [--payload FILE]"; exit 1 ;;
 esac
@@ -86,8 +95,9 @@ if [ -z "$PAYLOAD" ]; then
 fi
 
 # --- 3. upload (RAM) and start the run ------------------------------------------------------------
-echo "gpu-follow: staging payload (RAM only)"
-FB_TIMEOUT=40 fb stage "$PAYLOAD" | grep -q OKAY || { echo "gpu-follow: upload failed"; exit 1; }
+echo "gpu-follow: staging payload (RAM only): $PAYLOAD"
+stage_out=$(FB_TIMEOUT=40 fb stage "$PAYLOAD")
+echo "$stage_out" | grep -q OKAY || { echo "gpu-follow: upload failed:"; echo "$stage_out" | sed 's/^/  /'; exit 1; }
 echo "gpu-follow: oem run — the phone may reset during step 20; that is expected"
 FB_TIMEOUT=10 fb oem run | grep -q OKAY || { echo "gpu-follow: oem run was refused"; exit 1; }
 
