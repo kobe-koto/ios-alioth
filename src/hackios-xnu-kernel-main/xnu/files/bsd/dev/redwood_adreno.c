@@ -3385,44 +3385,48 @@ step_core_start(void)
 		return !space_faulted(&core_space);
 	}
 	sleep_ms(pre_sqe_ms);
-	printf("adreno: %u: about to write %u to cp_sqe_cntl\n", step, sqe);
-	loader_log_flush();
 	/*
-	 * adreno_mask_irq=N: mask interrupts on this core across the fatal write, to tell whether the
+	 * adreno_mask_irq=N: mask this core's interrupts across the fatal write, to tell whether the
 	 * reset is this core taking an exception the moment the command processor starts. 1: IRQ+FIQ;
-	 * 2: also SError/async abort (DAIF bit A). A masked SError is deferred, not lost -- so if the
-	 * machine lives through a masked write, the DAIF is restored afterwards and, if an SError was
-	 * pending, it is taken then (and named in the next-run log, or at least separated from a PMIC
-	 * reset). If the reset still happens with everything masked, it is not an exception this core
-	 * takes: it is the hardware/hypervisor resetting the SoC. Default 0: the write is made exactly
-	 * as before.
+	 * 2: also SError/async abort (DAIF bit A). If the machine lives through a masked write, DAIF is
+	 * restored afterwards and a deferred SError, if any, is taken then. If the reset still happens
+	 * with everything masked, it is not an exception this core takes: it is the hardware/hypervisor.
+	 *
+	 * NOTHING is printed while interrupts are masked: XNU panics on console I/O from an
+	 * interrupt-disabled context (serial_console.c). So the announcement is made first, with
+	 * interrupts still on; then mask, write with the bare wr() (no printf inside), spin a little
+	 * with a plain delay (no timer/interrupt), restore DAIF, and only then print the outcome.
+	 * Default 0: the write is made exactly as before, through put().
 	 */
 	uint32_t mask_irq = 0;
-	uint64_t saved_daif = 0;
 	PE_parse_boot_argn("adreno_mask_irq", &mask_irq, sizeof(mask_irq));
+	printf("adreno: %u: about to write %u to cp_sqe_cntl%s\n", step, sqe,
+	    mask_irq ? " (interrupts will be masked across it, silently)" : "");
+	loader_log_flush();
 	if (mask_irq) {
-		saved_daif = __builtin_arm_rsr64("DAIF");
+		uint64_t saved_daif = __builtin_arm_rsr64("DAIF");
+		uint64_t masked_daif;
+
 		/* DAIFSet bits: F=1<<0, I=1<<1, A(SError)=1<<2. The builtin needs a constant, so branch. */
 		if (mask_irq >= 2) {
 			__builtin_arm_wsr("DAIFSet", 1u << 2 | 1u << 1 | 1u << 0);
 		} else {
 			__builtin_arm_wsr("DAIFSet", 1u << 1 | 1u << 0);
 		}
-		printf("adreno: %u: interrupts masked for the write (adreno_mask_irq=%u): DAIF was %#llx, now %#llx\n",
-		    step, mask_irq, saved_daif, (uint64_t)__builtin_arm_rsr64("DAIF"));
+		masked_daif = __builtin_arm_rsr64("DAIF");
+		/* --- interrupt-disabled window: no printf, no sleep_ms, no console I/O --- */
+		wr(gpu.base + CP_SQE_CNTL, sqe);                /* the bare write; put() would printf here */
+		__asm__ volatile ("dsb sy" : : : "memory");
+		for (volatile uint64_t i = 0; i < 2000000; i++) {       /* a short spin, no timer/interrupt */
+			__asm__ volatile ("" : : : "memory");
+		}
+		__builtin_arm_wsr64("DAIF", saved_daif);        /* unmask; a deferred SError is taken here */
+		/* --- interrupts back on --- */
+		printf("adreno: %u: SURVIVED the write with interrupts masked (DAIF was %#llx, masked to %#llx, "
+		    "restored); it is not an exception this core takes\n", step, saved_daif, masked_daif);
 		loader_log_flush();
-	}
-	put(&gpu, "cp_sqe_cntl", CP_SQE_CNTL, sqe);
-	if (mask_irq) {
-		/* survived the write with interrupts masked: say so, then unmask and let any deferred one fire */
-		printf("adreno: %u: survived the write with interrupts masked; restoring DAIF %#llx now -- a deferred "
-		    "SError, if any, is taken here\n", step, saved_daif);
-		loader_log_flush();
-		sleep_ms(20);
-		__builtin_arm_wsr64("DAIF", saved_daif);
-		sleep_ms(20);
-		printf("adreno: %u: DAIF restored and still here\n", step);
-		loader_log_flush();
+	} else {
+		put(&gpu, "cp_sqe_cntl", CP_SQE_CNTL, sqe);
 	}
 	/*
 	 * One access at a time, each announced before it is made: the run stops at the start of the
