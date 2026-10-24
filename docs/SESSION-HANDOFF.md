@@ -946,6 +946,43 @@ SMMU 翻译与取指（bypass 与非 bypass 都试、aperture 注册被 hyp 接�
 
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
+#### 第十三轮：金标准 trace 拿到——找到 CP_RB_CNTL bit27 的具体差异（2026-10-24，真机）
+
+**突破了「金标准受阻」的僵局**：真机刷了 KSU（内核级 root，`adbd is already running as root`），
+tracefs 可用、**`kgsl_regwrite` tracepoint 存在**（MMIO 写级）。用 `tools/gold-trace.sh`：
+`stop surfaceflinger` 让 GPU 无用户沉到 SLUMBER → 开 trace → `start surfaceflinger` 触发**从 SLUMBER 冷启**
+→ 抓到 kgsl 完整启动 CP 的寄存器写序列（614 条到首个 SQE_CNTL）。
+证据：`docs/evidence/2026-10-24-gold-kgsl-cold-start.trace`、`…-gold-cold-start-seq.txt`。
+
+**注意**：trace 里 `reg=` 是 **kgsl 字偏移**（SQE_CNTL=`0x808`），不是裸驱动的字节地址（`0x2020=0x808*4`）。
+曾因此误判「没抓到」。
+
+**逐条对照金标准 vs 本驱动 step 20，缺失的几乎都是无害项**（高位字已被本驱动 `put64` 一次覆盖、抢占寄存器
+`CP_CONTEXT_SWITCH_SMMU_INFO` 我们不用、GBIF 性能计数器非关键、GMU 侧在 step15-17 另写）。**唯一实质差异在
+SQE_CNTL 紧邻的前一条——`CP_RB_CNTL`**：
+- 金标准 `reg=0x802 value=0x20c`（**bit27 = 0**）
+- 本驱动 `CP_RB_CNTL_VALUE = 0x800020c`（**bit27 = 1**），且默认**不写 `CP_RB_RPTR_ADDR`(0x804/0x805)**
+- 差异恰为 `0x8000000`（bit27）。金标准还总是写 `CP_RB_RPTR_ADDR`（真实地址）。
+
+**这是 bug**：a650 **有 APRIV**。APRIV 的 GPU 必须让 CP 把读指针回写内存（bit27=0 + 给 RPTR_ADDR）；只有非 APRIV
+才设 bit27=1「不回写」。本驱动一直给 APRIV 核配了 bit27=1 + 不给 RPTR_ADDR —— 矛盾配置。CP 启动后按 APRIV 约定
+动作与寄存器设置冲突，极可能正是复位。驱动注释其实写对了（§ `adreno_rptr`），但**默认值配反了**。
+
+`adreno_rptr=1` 正好做对这两件事（`put64(CP_RB_RPTR_ADDR, core_scratch) + CP_RB_CNTL & ~bit27`），实现无需改。
+但历史上试 `adreno_rptr=1` 复位过——那是在 **bypass + 无 aperture** 环境、且与别的坏配置叠加。**从没试过的是
+完整金标准路径**。
+
+**下一实验（载荷已就绪 `run-payload-gpu-goldpath.bin`，纯 cmdline 组合、不改码）**：
+`adreno_direct=0 adreno_aperture=1 adreno_rptr=1 adreno_fullstart=1`——非 bypass 真翻译 + hyp 注册 aperture +
+APRIV 正确的 RB_CNTL/RPTR_ADDR + 完整 a6xx_start。这是第一次让本驱动的 CP 启动配置**整体贴合金标准**。
+预期：若 bit27 是主因，`the write to cp_sqe_cntl came back` 首次出现。
+
+**采集工具入库**：`tools/gold-trace.sh`（stop/ start surfaceflinger 法抓 GPU 冷启 trace，需 root）。
+若本轮仍复位，继续用金标准逐条比对 SQE_CNTL **之后** kgsl 做了什么（CP_ME_INIT 命令、unsecure），以及 RB_CNTL
+低位 `0x20c` vs 本驱动 `0x20c` 低位是否也需对齐（当前低位一致，只 bit27 差）。
+
+工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
