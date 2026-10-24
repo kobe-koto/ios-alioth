@@ -114,6 +114,10 @@
  *   adreno_pre_sqe_ms=N step 20 holds N ms (default 800), silent, right before the CP_SQE_CNTL
  *                      write that resets the phone, so the host's log pull (tools/gpu-follow.sh)
  *                      is sure to have carried every line of the state up to that point first
+ *   adreno_keepalive=1 (default) step 20 writes GMU_PWR_COL_KEEPALIVE=1 before starting the command
+ *                      processor, the vendor's "keep the core powered whatever it does" (adreno.c);
+ *                      =0 leaves it out. The leading guess for the reset: the GMU takes the SoC down
+ *                      when the started CP raises the core's activity and it was not told to hold
  *   adreno_return=1    when all is over, go back to the loader instead of starting the system
  *   display_probe=1    before any step: read what the firmware left the display controller
  *                      doing (display_probe() below; two clocks are turned on, nothing else written)
@@ -1111,6 +1115,7 @@ static struct block gmu = { "gmu", 0x03d6a000, 0x34000 };
 #define GMU_ALWAYS_ON_COUNTER_L GMU_WORD(0x5088)        /* counts the 19.2 MHz crystal */
 #define GMU_ALWAYS_ON_COUNTER_H GMU_WORD(0x5089)
 #define GMU_SPTPRAC_PWR_CLK_STATUS GMU_WORD(0x50d0)     /* bit 6: the 3D core has no power, bit 7: no clock */
+#define GMU_PWR_COL_KEEPALIVE   GMU_WORD(0x50c3)        /* a6xx_gmu.xml; 1: the GMU keeps the core powered, whatever it makes of it */
 #define GMU_RPMH_POWER_STATE    GMU_WORD(0x50ec)
 #define GMU_HFI_CTRL_STATUS     GMU_WORD(0x5180)
 #define GMU_HFI_VERSION_INFO    GMU_WORD(0x5181)
@@ -3309,6 +3314,25 @@ step_core_start(void)
 	    "start the 3D core's command processor");
 	core_runs = true;
 	/*
+	 * adreno_keepalive=1 (default): before the command processor is started, tell the GMU to keep
+	 * the 3D core powered no matter what it makes of the core's activity -- GMU_PWR_COL_KEEPALIVE=1.
+	 * This is the vendor's lightest "do not take the GPU away while we work on it" (adreno.c: every
+	 * path that touches GPU registers or starts it sets keepalive first; a6xx.xml
+	 * GMU_PWR_COL_KEEPALIVE). It is NOT the OOB handshake (never acknowledged here, §9.5 round 2) and
+	 * NOT SPTPRAC (unwritable here): it is a single GMU register, and this driver's recover path
+	 * already writes it on this phone, so it is known to take. The leading remaining hypothesis for
+	 * the reset is that the moment the CP starts and raises the core's activity, the GMU -- not told
+	 * to hold -- runs a power sequence that takes the SoC down. adreno_keepalive=0 leaves it out, to
+	 * confirm by contrast. Cleared again when the GPU is given back (step_core_start's callers / watch).
+	 */
+	uint32_t keepalive = 1;
+	PE_parse_boot_argn("adreno_keepalive", &keepalive, sizeof(keepalive));
+	if (keepalive) {
+		put(&gmu, "pwr_col_keepalive", GMU_PWR_COL_KEEPALIVE, 1);
+		printf("adreno: %u: told the GMU to keep the core powered (keepalive=1, reads back %#x)\n", step,
+		    rd(gmu.base + GMU_PWR_COL_KEEPALIVE));
+	}
+	/*
 	 * A pause first, so that the loader (which writes the end of this log to storage every quarter of
 	 * a second) has taken down what was read before the start: what follows it is not seen again.
 	 * If the machine is gone at the end of the pause, the idle core is being taken away by something
@@ -3781,7 +3805,6 @@ redwood_adreno_quiesce(void)
 /* and, for a core that has stopped answering (gpu_recover=1: redwood_gpu_recover() below) */
 #define RBBM_SW_RESET_CMD       GPU_WORD(0x0043)        /* a6xx.xml; 1 holds the 3D core's own half (GX) in reset */
 #define RBBM_INT_CLEAR_CMD      GPU_WORD(0x0037)        /* the bits of rbbm_int_0_status written here are forgotten */
-#define GMU_PWR_COL_KEEPALIVE   GMU_WORD(0x50c3)        /* a6xx_gmu.xml; 1: the GMU keeps the core powered, whatever it makes of it */
 #define GMU_AHB_FENCE_STATUS_CLR GMU_WORD(0x9314)       /* the bits of ahb_fence_status written here are forgotten */
 #define GPU_RECOVERIES          64                      /* at most in one run: a program that hangs every submission fills no log with this */
 
