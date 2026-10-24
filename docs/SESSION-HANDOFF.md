@@ -983,6 +983,41 @@ APRIV 正确的 RB_CNTL/RPTR_ADDR + 完整 a6xx_start。这是第一次让本驱
 
 工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
 
+#### 第十四轮：金标准完整路径仍复位 + 逐条比对收尾（2026-10-24，真机）
+
+跑 `run-payload-gpu-goldpath.bin`（`adreno_direct=0 aperture=1 rptr=1 fullstart=1`），真机确认所有配置都贴合金标准：
+`cp_rb_cntl=0x20c`(bit27=0)、`cp_rb_rptr_addr=0x1200000`(低位写对、高位0)、aperture accepted、
+`cp_sqe_instr_base=0x1100000`(翻译地址)、apriv `0x6e`、rbbm_status `0x1`——**CP 写 SQE_CNTL 仍整机复位**，
+停在 STATE COMPLETE。证据：`docs/evidence/2026-10-24-gpu-goldpath.log`。**bit27/rptr/aperture/非bypass 都不是主因。**
+
+**逐条比对金标准全 614 条冷启序列 vs 本驱动 step 20（系统性，按寄存器区归类）后的收尾结论**：
+本驱动在 CP 启动前的寄存器配置，**没有真正该补而未补的功能性遗漏**。金标准写了、本驱动没写的，全部归入三类
+无害/环境差异：
+- **HI 高位字**（`0x801/0x805/0x831/0xe06/0xe08/0xe0a/0xf801`…）——本驱动用 `put64` 一次写 64 位已覆盖；
+- **抢占/上下文切换寄存器**（`0x8a1/0x8a2 CP_CONTEXT_SWITCH_SMMU_INFO`、`0x8e50 GMEM_SAVE_RESTORE`）——
+  本驱动不用抢占，不需要；
+- **`0x038 RBBM_INT_0_MASK = 0x13d0e3c2`**——使能一组 GPU→CPU 中断。金标准使能是因为 Linux 有完整中断处理；
+  本驱动是裸环境、无 GPU 中断处理程序，**不使能（默认 0）是合理的，补它反而可能产生无人处理的中断**。
+  且第八轮已证 CPU 侧全屏蔽中断仍复位，这条不是主因。
+
+**所以金标准对照这条线走到底了**：CP 启动前的 MMIO 配置已和厂商逐条对齐（功能性层面），仍复位。
+这把结论进一步钉死：**复位不来自 CP 启动前任何可见的 MMIO 寄存器配置差异。** 要么在 trace 看不到的层面
+（GMU 固件内部状态、HFI 消息语义、内存内容/属性），要么就是 CP 微码执行时碰到的某个环境事实（§9.5 反复指向的
+「SoC 级、微码一执行就复位」）。
+
+**可复用产出**：`run-payload-gpu-goldpath.bin`（最贴合金标准的载荷）；金标准 trace 与序列在 `docs/evidence/`；
+`tools/gold-trace.sh`。`adreno_aperture`/`adreno_rptr`/`adreno_fullstart` 现在已知都是「正确但不充分」，默认仍关，
+因为单独或组合都不改变结局，且默认路径要保持 step 1–19 稳定。
+
+**若再推进（都需 trace 之外的信息）**：
+- 金标准 trace 里 **GMU 侧 regwrite + HFI**：本驱动 GMU 启动（step 15-17）与金标准 GMU 序列逐条比对，
+  看 CP 依赖的某个 GMU 状态是否没配（GMU 固件托管电源，CP 启动可能依赖 GMU 侧某寄存器）。
+- `qcom_scm_assign_mem`：确认 ring/微码内存是否需从 VMID_HLOS 转给 GPU VMID（trace 看不到 SCM 的话用 ftrace 的
+  `scm`/`qcom_scm` tracepoint，若有）。
+- 精确解码 PMIC `reason1 0x2`。
+
+工具：会复位的真机实验一律 `tools/gpu-follow.sh` + `adreno_pre_sqe_ms`；屏蔽态内严禁任何 printf/console I/O。
+
 #### 第三轮：Android 侧“金标准”对照（2026-10-23 19:40，结论：本机取不到运行中的寄存器）
 
 目标：在 Android 里读 kgsl 正在使用的 GPU 寄存器值，做“已知正确”的对照。结果：
